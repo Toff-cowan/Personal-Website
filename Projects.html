@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christoff's Portfolio</title>
+    <link rel="stylesheet" href="a_styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" onclick="hideMenu()"></i>
+            <ul>
+                <li><a href="homepage.html">HOME</a></li>
+                <li><a href="Projects.html">PROJECTS</a></li>
+            </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+
+    <main class="projects-main">
+        <header class="projects-header">
+            <div class="header-content">
+                <h1>My Projects</h1>
+                <p>Explore my technical journey through these completed and ongoing projects</p>
+            </div>
+        </header>
+
+        <section class="skills-section">
+            <h2>Technical Skills</h2>
+            <div class="skills-container">
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>HTML/CSS</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 85%"></div>
+                    </div>
+                </div>
+            
+            <div class="skill-item">
+                <div class="skill-info">
+                    <span>JavaScript</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-info">
+                    <span>Python</span>
+                    <span>80%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 80%"></div>
+                </div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-info">
+                    <span>Circuit Design</span>
+                    <span>70%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="projects-container">
+        <div class="project-card" onclick="toggleProject(this)">
+            <div class="card-front">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')"></div>
+                <div class="project-info">
+                    <h3>Portfolio Website</h3>
+                    <p class="project-status completed">Completed</p>
+                    <div class="tech-tags">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-back">
+                <h3>Portfolio Website</h3>
+                <p>A responsive personal portfolio website showcasing my skills and projects. Built with pure HTML, CSS, and JavaScript.</p>
+                <ul class="project-features">
+                    <li>Interactive navigation</li>
+                    <li>Project showcase section</li>
+                    <li>Responsive design</li>
+                </ul>
+                <a href="#" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="project-card" onclick="toggleProject(this)">
+            <div class="card-front">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80')"></div>
+                <div class="project-info">
+                    <h3>Smart Home System</h3>
+                    <p class="project-status in-progress">In Progress</p>
+                    <div class="tech-tags">
+                        <span>Python</span>
+                        <span>IoT</span>
+                        <span>Raspberry Pi</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-back">
+                <h3>Smart Home System</h3>
+                <p>An IoT-based home automation system that controls lights, temperature, and security using Raspberry Pi.</p>
+                <ul class="project-features">
+                    <li>Remote control via mobile app</li>
+                    <li>Energy usage monitoring</li>
+                    <li>Voice command integration</li>
+                </ul>
+                <a href="#" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="project-card" onclick="toggleProject(this)">
+            <div class="card-front">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')"></div>
+                <div class="project-info">
+                    <h3>E-commerce Dashboard</h3>
+                    <p class="project-status completed">Completed</p>
+                    <div class="tech-tags">
+                        <span>React</span>
+                        <span>Node.js</span>
+                        <span>MongoDB</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-back">
+                <h3>E-commerce Dashboard</h3>
+                <p>A full-stack e-commerce management dashboard with inventory tracking, sales analytics, and customer management.</p>
+                <ul class="project-features">
+                    <li>Real-time sales tracking</li>
+                    <li>Inventory management</li>
+                    <li>Customer analytics</li>
+                </ul>
+                <a href="#" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="project-card" onclick="toggleProject(this)">
+            <div class="card-front">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')"></div>
+                <div class="project-info">
+                    <h3>Circuit Simulator</h3>
+                    <p class="project-status planned">Planned</p>
+                    <div class="tech-tags">
+                        <span>C++</span>
+                        <span>Electronics</span>
+                        <span>UI Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-back">
+                <h3>Circuit Simulator</h3>
+                <p>A desktop application for simulating electronic circuits with visualization of current flow and voltage measurements.</p>
+                <ul class="project-features">
+                    <li>Drag-and-drop components</li>
+                    <li>Real-time simulation</li>
+                    <li>Circuit analysis tools</li>
+                </ul>
+                <a href="#" class="project-link">View Concept <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const navLinks = document.getElementById("navLinks");
+        
+        function showMenu() {
+            navLinks.style.right = "0";
+            document.body.style.overflow = "hidden";
+        }
+        
+        function hideMenu() {
+            navLinks.style.right = "-200px";
+            document.body.style.overflow = "auto";
+        }
+
+        // Project card toggle function
+        function toggleProject(card) {
+            const allCards = document.querySelectorAll('.project-card');
+            
+            // Close all other open cards
+            allCards.forEach(item => {
+                if (item !== card && item.classList.contains('expanded')) {
+                    item.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle the clicked card
+            card.classList.toggle('expanded');
+        }
+
+        // Close project card when clicking outside
+        document.addEventListener('click', function(event) {
+            const projectsContainer = document.querySelector('.projects-container');
+            const isClickInside = projectsContainer.contains(event.target);
+            
+            if (!isClickInside) {
+                const expandedCards = document.querySelectorAll('.project-card.expanded');
+                expandedCards.forEach(card => {
+                    card.classList.remove('expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

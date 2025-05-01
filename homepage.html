@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Christoff's Portfolio</title>
+        <link rel="stylesheet" type="text/css" href="p_styles.css"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    </head>
+    <body>
+        <nav>
+            <div class="nav-links" id="navLinks">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="homepage.html">HOME</a></li>
+                    <li><a href="Projects.html">PROJECTS</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+        
+        <section class="main-content">
+            <!-- Slider moved to top -->
+            <div class="slider-container">
+                <div class="slider">
+                    <div class="slide">
+                        <img src="C:\Users\cowan\Documents\Programming\Personal Website\Pictures\Final Project Design.png" alt="Programming">
+                        <div class="slide-content">
+                            <h2>My Skills</h2>
+                            <p>Programming, Circuit Analysis, Mathematics, and more...</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="C:\Users\cowan\Documents\Programming\Personal Website\Pictures\Projects.jpg" alt="Projects">
+                        <div class="slide-content">
+                            <h2>My Projects</h2>
+                            <p>Check out my latest work in computer science and electronics</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="C:\Users\cowan\Documents\Programming\Personal Website\Pictures\Spotlight Welcome.jpg" alt="Education">
+                        <div class="slide-content">
+                            <h2>Education</h2>
+                            <p>Currently pursuing a Bachelor's degree in Electronics and Computer Science <br> At the University of The West Indies, Mona Campus</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-nav">
+                    <button id="prev-slide"><i class="fas fa-chevron-left"></i></button>
+                    <button id="next-slide"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="slider-dots"></div>
+            </div>
+
+            <!-- Welcome section below slider -->
+            <div class="welcome-section">
+                <div class="welcome">
+                    <h1>Welcome.</h1>
+                    <p>My name is Christoff Cowan, young and upcoming computer programmer. 
+                        This website serves as medium to showcase my coding skills and show my resume and other skills in 
+                        a web format.
+                    </p>
+                    <a href="Projects.html" class="btn">PROJECTS</a>
+                    <div class="social-icons">
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button id="prev-month">&#9664;</button>
+                    <h2 id="month-year"></h2>
+                    <button id="next-month">&#9654;</button>
+                </div>
+                <div class="calendar-body">
+                    <div class="calendar-weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="calendar-dates"></div>
+                </div>
+            </div>
+            <div class="container">
+                <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
+                </div>
+            </div>
+        </footer>
+    
+        <script src="calender.js"></script>
+
+        <script>
+            const navLinks = document.getElementById("navLinks");
+        
+            function showMenu() {
+                navLinks.style.right = "0";
+                document.body.style.overflow = "hidden";
+            }
+        
+            function hideMenu() {
+                navLinks.style.right = "-200px";
+                document.body.style.overflow = "auto";
+            }
+
+            // Enhanced Slider functionality
+            const slider = document.querySelector('.slider');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-slide');
+            const nextBtn = document.getElementById('next-slide');
+            const dotsContainer = document.querySelector('.slider-dots');
+            let currentIndex = 0;
+            let autoScrollInterval;
+            const slideInterval = 6000; // 6 seconds
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = document.querySelectorAll('.dot');
+            
+            function updateSlider() {
+                slider.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)';
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateSlider();
+                resetAutoScroll();
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateSlider();
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateSlider();
+            }
+            
+            function startAutoScroll() {
+                autoScrollInterval = setInterval(nextSlide, slideInterval);
+            }
+            
+            function resetAutoScroll() {
+                clearInterval(autoScrollInterval);
+                startAutoScroll();
+            }
+            
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoScroll();
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoScroll();
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                    resetAutoScroll();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                    resetAutoScroll();
+                }
+            });
+            
+            // Hide navbar on scroll
+            let lastScroll = 0;
+            const navbar = document.querySelector('nav');
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll <= 0) {
+                    navbar.classList.remove('hidden');
+                    return;
+                }
+                
+                if (currentScroll > lastScroll && !navbar.classList.contains('hidden')) {
+                    navbar.classList.add('hidden');
+                } else if (currentScroll < lastScroll && navbar.classList.contains('hidden')) {
+                    navbar.classList.remove('hidden');
+                }
+                
+                lastScroll = currentScroll;
+            });
+            
+            // Initialize
+            startAutoScroll();
+            
+            // Pause autoscroll on hover
+            slider.addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
+            
+            slider.addEventListener('mouseleave', () => {
+                startAutoScroll();
+            });
+        </script>
+    </body>
+</html>     
