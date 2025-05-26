@@ -28,7 +28,7 @@ nav {
 }
 
 nav.hidden {
-    top: -80px;
+    top: -100px;
 }
 
 nav .fa {
