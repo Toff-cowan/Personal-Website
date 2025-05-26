@@ -425,6 +425,7 @@ nav .fa {
 @media (max-width: 768px) {
     nav .fa {
         display: block;
+        align-self: flex-end;
     }
 
     .nav-links {
