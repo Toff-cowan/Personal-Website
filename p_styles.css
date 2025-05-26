@@ -104,6 +104,15 @@ nav .fa {
     align-items: center;
     flex-grow: 1;
 }
+.fa-times {
+    margin: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-size: 24px;
+    color: #333;
+}
 
 /* Welcome Section */
 .welcome-section {
