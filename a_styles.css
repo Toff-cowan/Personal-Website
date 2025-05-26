@@ -84,15 +84,7 @@ nav .fa {
 .nav-links ul li:hover a {
     color: #001f3f;
 }
-.fa-times {
-    margin: 20px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    font-size: 24px;
-    color: #333;
-}
+
 /* Mobile Menu - Matched to Homepage */
 @media (max-width: 768px) {
     nav .fa {
@@ -102,6 +94,7 @@ nav .fa {
     .nav-links {
         position: fixed;
         background: #ffffff;
+        align-items: flex-start;
         height: 100vh;
         width: 200px;
         top: 0;
