@@ -364,7 +364,7 @@ nav .fa {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-     nav .fa {
+    nav .fa {
         display: block;
         align-self: flex-end;
     }
@@ -408,15 +408,6 @@ nav .fa {
     .project-image {
         height: 150px;
     }
-    .nav-links .fa-times {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    color: #000000;
-    cursor: pointer;
-    display: block;
-}
 }
 
 @media (max-width: 480px) {
