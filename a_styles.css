@@ -382,6 +382,7 @@ nav .fa {
 
     .nav-links ul {
         flex-direction: column;
+        padding: 15px 30px;
     }
 
     .nav-links ul li {
