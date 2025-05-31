@@ -98,7 +98,7 @@ nav .fa {
 }
 
 .main-content {
-    width: 100vmax;
+    width: 100%;
     padding: 40px 0;
     display: flex;
     flex-direction: column;
