@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="data-percent=device-data-percent, initial-scale=1.0">
     <title>Christoff's Portfolio</title>
     <link rel="stylesheet" href="a_styles.css">
     <link rel="icon" href="favicon.ico" type="Pictures/favicon.ico">
@@ -38,7 +38,7 @@
                         <span>85%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress" style="width: 85%"></div>
+                        <div class="progress" data-percent=" 85%"></div>
                     </div>
                 </div>
             
@@ -48,7 +48,7 @@
                     <span>75%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 75%"></div>
+                    <div class="progress" data-percent=" 75%"></div>
                 </div>
             </div>
             
@@ -58,7 +58,7 @@
                     <span>80%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 80%"></div>
+                    <div class="progress" data-percent=" 80%"></div>
                 </div>
             </div>
             
@@ -68,7 +68,7 @@
                     <span>70%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 70%"></div>
+                    <div class="progress" data-percent="70%"></div>
                 </div>
             </div>
         </div>
@@ -233,6 +233,28 @@
                 });
             }
         });
+ function animateSkills() {
+    const skills = document.querySelectorAll('.progress');
+    skills.forEach(skill => {
+      const percent = skill.getAttribute('data-percent');
+      skill.style.width = percent;
+    });
+  }
+
+  // Animate when skills section is in view
+  const skillsSection = document.querySelector('.skills-section');
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateSkills();
+        observer.unobserve(entry.target); // Run once
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (skillsSection) {
+    observer.observe(skillsSection);
+  }
     </script>
 </body>
 </html>

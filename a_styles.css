@@ -167,6 +167,8 @@ nav .fa {
 .skill-info span:first-child {
     font-weight: 700;
     color: #001f3f;
+    transition: fade 0.3s ease;
+    transition-duration: 5s;
 }
 
 .progress-bar {
@@ -178,9 +180,10 @@ nav .fa {
 
 .progress {
     height: 100%;
+    width: 0;
     background: linear-gradient(90deg, #001f3f, #4d9de0);
     border-radius: 5px;
-    transition: width 1s ease-in-out;
+    transition: width 3s ease-in-out;
 }
 
 /* Projects Container */
