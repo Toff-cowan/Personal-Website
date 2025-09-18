@@ -64,28 +64,30 @@
                 <div class="slider-dots"></div>
             </div>
 <!-- Links -->
-            <div class="welcome-section">
-                <div class="welcome">
-                    <p>Feel free to check out my projects and social media accounts below.</p>
-                    <a href="Projects.html" class="btn">PROJECTS</a>
-                    <div class="social-icons">
-                    <!-- <a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a> -->
-                        <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
+            <!-- Links -->
+<div class="welcome-section">
+    <div class="welcome">
+        <p>Feel free to check out my projects and social media accounts below.</p>
+        <a href="Projects.html" class="btn">PROJECTS</a>
+        <div class="social-icons">
+            <!-- <a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a> -->
+            <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+
+        <!-- Resume Button -->
+        <button class="btn" onclick="toggleResume()">VIEW RESUME</button>
+
+        <!-- Hidden Resume Section -->
+        <div class="resume-section" id="resumeSection" style="display:none; margin-top:20px;">
+            <div class="resume-viewer">
+                <iframe src="Resume/CV_Christoff_Cowan.pdf" frameborder="0"></iframe>
             </div>
-        </section>
-        <section class="resume-section">
-            <div class="container">
-                <h2>My Resume</h2>
-                <p>You can view my resume directly below.</p>
-                <div class="resume-viewer">
-                    <iframe src="Resume\CV_Christoff_Cowan.pdf" frameborder="0"></iframe>
-                </div>
-            </div>
-        </section>
+        </div>
+    </div>
+</div>
+
         <footer class="footer">
             <div class="container">
                 <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
@@ -222,6 +224,15 @@
             slider.addEventListener('mouseleave', () => {
                 startAutoScroll();
             });
+
+            function toggleResume() {
+    const resume = document.getElementById("resumeSection");
+    if (resume.style.display === "none" || resume.style.display === "") {
+        resume.style.display = "block";
+    } else {
+        resume.style.display = "none";
+    }
+}
         </script>
     </body>
 </html>     
