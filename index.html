@@ -1,237 +1,227 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Christoff's Portfolio</title>
-        <link rel="stylesheet" type="text/css" href="p_styles.css"/>
-        <link rel="icon" href="favicon.ico" type="favicon.ico">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    </head>
-    <body>
-        <nav>
-            <div class="nav-links" id="navLinks">
-                <i class="fa fa-times" onclick="hideMenu()"></i>
-                <ul>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="Projects.html">PROJECTS</a></li>
-                </ul>
-            </div>
-            <i class="fa fa-bars" onclick="showMenu()"></i>
-        </nav>
-<!-- Welcome section above slider -->
-            <div class="welcome-section">
-                <div class="welcome">
-                    <h1>Welcome.</h1>
-                    <p>My name is Christoff Cowan, young and upcoming computer programmer. 
-                        This website serves as medium to showcase my coding skills and show my resume and other skills in 
-                        a web format.</p>
-                    </div>
-                    </div>  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christoff's Portfolio</title>
+    <link rel="stylesheet" type="text/css" href="p_styles.css"/>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" onclick="hideMenu()"></i>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="Projects.html">PROJECTS</a></li>
+            </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
 
-        <section class="main-content">
-            <!-- Slider moved to top -->
-            <div class="slider-container">
-                <div class="slider">
-                    <div class="slide">
-                        <img src="Pictures\Final Project Design.jpg" alt="Programming">
-                        <div class="slide-content">
-                            <h2>My Skills</h2>
-                            <p>Programming, Circuit Analysis, Mathematics, and more...</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <img src="Pictures\Projects.jpg" alt="Projects">
-                        <div class="slide-content">
-                            <h2>My Projects</h2>
-                            <p>Check out my latest work in computer science and electronics</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <img src="Pictures\Spotlight Welcome.jpg" alt="Education">
-                        <div class="slide-content">
-                            <h2>Education</h2>
-                            <a href="https://www.mona.uwi.edu/" target="_blank" class="btn">University of The West Indies</a>
-                            <p>Currently pursuing a Bachelor's degree in Electronics and Computer Science <br> At the University of The West Indies, Mona Campus</p>
-                        </div>
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <div class="welcome">
+            <h1>Welcome.</h1>
+            <p>My name is Christoff Cowan, a young and upcoming computer programmer. 
+               This website serves as a medium to showcase my coding skills, resume, and other abilities in a web format.
+            </p>
+        </div>
+    </div>  
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <!-- Slider -->
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide">
+                    <img src="Pictures/Final Project Design.jpg" alt="Programming">
+                    <div class="slide-content">
+                        <h2>My Skills</h2>
+                        <p>Programming, Circuit Analysis, Mathematics, and more...</p>
                     </div>
                 </div>
-                <div class="slider-nav">
-                    <button id="prev-slide"><i class="fas fa-chevron-left"></i></button>
-                    <button id="next-slide"><i class="fas fa-chevron-right"></i></button>
+                <div class="slide">
+                    <img src="Pictures/Projects.jpg" alt="Projects">
+                    <div class="slide-content">
+                        <h2>My Projects</h2>
+                        <p>Check out my latest work in computer science and electronics.</p>
+                    </div>
                 </div>
-                <div class="slider-dots"></div>
+                <div class="slide">
+                    <img src="Pictures/Spotlight Welcome.jpg" alt="Education">
+                    <div class="slide-content">
+                        <h2>Education</h2>
+                        <a href="https://www.mona.uwi.edu/" target="_blank" class="btn">University of The West Indies</a>
+                        <p>Currently pursuing a Bachelor's degree in Electronics and Computer Science <br>
+                           at the University of The West Indies, Mona Campus.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <!-- Links -->
-<div class="welcome-section">
-    <div class="welcome">
-        <p>Feel free to check out my projects and social media accounts below.</p>
-        <a href="Projects.html" class="btn">PROJECTS</a>
-        <div class="social-icons">
-            <!-- <a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a> -->
-            <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
+
+            <!-- Slider Controls -->
+            <div class="slider-nav">
+                <button id="prev-slide"><i class="fas fa-chevron-left"></i></button>
+                <button id="next-slide"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="slider-dots"></div>
         </div>
 
-        <!-- Resume Button -->
-        <button class="btn" onclick="toggleResume()">VIEW RESUME</button>
+        <!-- Links + Socials + Resume -->
+        <div class="welcome-section">
+            <div class="welcome">
+                <p>Feel free to check out my projects and social media accounts below.</p>
+                <a href="Projects.html" class="btn">PROJECTS</a>
 
-        <!-- Hidden Resume Section -->
-        <div class="resume-section" id="resumeSection" style="display:none; margin-top:20px;">
-            <div class="resume-viewer">
-                <iframe src="Resume/CV_Christoff_Cowan.pdf" frameborder="0"></iframe>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+
+                <!-- Resume Buttons -->
+                <a href="Resume/CV_Christoff_Cowan.pdf" target="_blank" class="btn">VIEW RESUME</a>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-        <footer class="footer">
-            <div class="container">
-                <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
-                </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
             </div>
-        </footer>
-    
+        </div>
+    </footer>
 
-        <script> // Function for the slider navigation bar, mobile responsive, and enhanced slider functionality
-            const navLinks = document.getElementById("navLinks");
-        
-            function showMenu() {
-                navLinks.style.right = "0";
-                document.body.style.overflow = "hidden";
-            }
-        
-            function hideMenu() {
-                navLinks.style.right = "-300px";
-                document.body.style.overflow = "auto";
-            }
+    <!-- Scripts -->
+    <script>
+        const navLinks = document.getElementById("navLinks");
 
-            // Enhanced Slider functionality
-            const slider = document.querySelector('.slider');
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prev-slide');
-            const nextBtn = document.getElementById('next-slide');
-            const dotsContainer = document.querySelector('.slider-dots');
-            let currentIndex = 0;
-            let autoScrollInterval;
-            const slideInterval = 6000; // 6 seconds
-            
-            // Create dots
-            slides.forEach((_, index) => {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                if (index === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => {
-                    goToSlide(index);
-                });
-                dotsContainer.appendChild(dot);
+        function showMenu() {
+            navLinks.style.right = "0";
+            document.body.style.overflow = "hidden";
+        }
+
+        function hideMenu() {
+            navLinks.style.right = "-300px";
+            document.body.style.overflow = "auto";
+        }
+
+        // Slider
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-slide');
+        const nextBtn = document.getElementById('next-slide');
+        const dotsContainer = document.querySelector('.slider-dots');
+        let currentIndex = 0;
+        let autoScrollInterval;
+        const slideInterval = 6000;
+
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                goToSlide(index);
             });
-            
-            const dots = document.querySelectorAll('.dot');
-            
-            function updateSlider() {
-                slider.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)';
-                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-                
-                // Update dots
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentIndex);
-                });
-            }
-            
-            function goToSlide(index) {
-                currentIndex = index;
-                updateSlider();
-                resetAutoScroll();
-            }
-            
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % slides.length;
-                updateSlider();
-            }
-            
-            function prevSlide() {
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-                updateSlider();
-            }
-            
-            function startAutoScroll() {
-                autoScrollInterval = setInterval(nextSlide, slideInterval);
-            }
-            
-            function resetAutoScroll() {
-                clearInterval(autoScrollInterval);
-                startAutoScroll();
-            }
-            
-            nextBtn.addEventListener('click', () => {
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            slider.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlider();
+            resetAutoScroll();
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(nextSlide, slideInterval);
+        }
+
+        function resetAutoScroll() {
+            clearInterval(autoScrollInterval);
+            startAutoScroll();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoScroll();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoScroll();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
                 nextSlide();
                 resetAutoScroll();
-            });
-            
-            prevBtn.addEventListener('click', () => {
+            } else if (e.key === 'ArrowLeft') {
                 prevSlide();
                 resetAutoScroll();
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') {
-                    nextSlide();
-                    resetAutoScroll();
-                } else if (e.key === 'ArrowLeft') {
-                    prevSlide();
-                    resetAutoScroll();
-                }
-            });
-            
-            // Hide navbar on scroll
-            let lastScroll = 0;
-            const navbar = document.querySelector('nav');
-            
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                
-                if (currentScroll <= 0) {
-                    navbar.classList.remove('hidden');
-                    return;
-                }
-                
-                if (currentScroll > lastScroll && !navbar.classList.contains('hidden')) {
-                    navbar.classList.add('hidden');
-                } else if (currentScroll < lastScroll && navbar.classList.contains('hidden')) {
-                    navbar.classList.remove('hidden');
-                }
-                
-                lastScroll = currentScroll;
-            });
-            
-            // Initialize
-            startAutoScroll();
-            
-            // Pause autoscroll on hover
-            slider.addEventListener('mouseenter', () => {
-                clearInterval(autoScrollInterval);
-            });
-            
-            slider.addEventListener('mouseleave', () => {
-                startAutoScroll();
-            });
+            }
+        });
 
-            function toggleResume() {
-    const resume = document.getElementById("resumeSection");
-    if (resume.style.display === "none" || resume.style.display === "") {
-        resume.style.display = "block";
-    } else {
-        resume.style.display = "none";
-    }
-}
-        </script>
-    </body>
-</html>     
+        // Hide navbar on scroll
+        let lastScroll = 0;
+        const navbar = document.querySelector('nav');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll <= 0) {
+                navbar.classList.remove('hidden');
+                return;
+            }
+            if (currentScroll > lastScroll && !navbar.classList.contains('hidden')) {
+                navbar.classList.add('hidden');
+            } else if (currentScroll < lastScroll && navbar.classList.contains('hidden')) {
+                navbar.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Init slider
+        startAutoScroll();
+
+        // Pause on hover
+        slider.addEventListener('mouseenter', () => {
+            clearInterval(autoScrollInterval);
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            startAutoScroll();
+        });
+    </script>
+</body>
+</html>
