@@ -22,7 +22,7 @@ let capturedByBlack = [];
 /* ---------- DOM controls (menu) ---------- */
 const whiteTimerEl = document.getElementById("white-timer");
 const blackTimerEl = document.getElementById("black-timer");
-const startBtn = document.getElementById("startBtn");
+//const startBtn = document.getElementById("startBtn");
 const timeSelect = document.getElementById("timeSelect");
 const newGameBtn = document.getElementById("newGameBtn");
 const loadingSpinner = document.getElementById("loadingSpinner");
@@ -42,13 +42,18 @@ let legalMoves = [];
 
 /* ---------- Utility: get image URL for a piece type/color ---------- */
 function getImageForPiece(pieceColor, pieceType) {
+  // First try to find an existing piece image on the page
   const candidates = Array.from(document.querySelectorAll('.piece'));
   for (let p of candidates) {
     const c = p.getAttribute('color');
     const t = p.classList[1];
     const img = p.querySelector('img');
-    if (img && c === pieceColor && t === pieceType) return img.src;
+    if (img && c === pieceColor && t === pieceType && img.src) {
+      return img.src;
+    }
   }
+  
+  // Fallback to local path - adjust this path to match your actual file structure
   return `chesspieces/${pieceColor}-${pieceType}.png`;
 }
 
@@ -1356,7 +1361,7 @@ newGameBtn.addEventListener('click', () => {
 function endGame(message) {
   stopGameTimer();
   showAlert(message);
-  startBtn.textContent = 'Start';
+  //startBtn.textContent = 'Start';
   isRunning = false;
   saveGameState();
 }
@@ -1436,7 +1441,7 @@ function loadGameState() {
     if (p.isRunning) {
       isRunning = true;
       startGameTimer();
-      startBtn.textContent = 'Pause';
+      //startBtn.textContent = 'Pause';
     }
     return true;
   } catch (e) {
