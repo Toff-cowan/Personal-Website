@@ -48,14 +48,9 @@ function getImageForPiece(pieceColor, pieceType) {
     const c = p.getAttribute('color');
     const t = p.classList[1];
     const img = p.querySelector('img');
-    if (img && c === pieceColor && t === pieceType && img.src) {
-      return img.src;
-    }
+    if (img && c === pieceColor && t === pieceType) return img.src;
   }
-  
-  // Use GitHub raw content URL with standardized naming
-  const baseUrl = 'https://raw.githubusercontent.com/Toff-cowan/Personal-Website/main/Chess/chesspieces';
-  return `${baseUrl}/${pieceColor}-${pieceType}.png`;
+  return `chesspieces/${pieceColor}-${pieceType}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
