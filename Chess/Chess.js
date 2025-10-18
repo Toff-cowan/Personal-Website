@@ -50,7 +50,7 @@ function getImageForPiece(pieceColor, pieceType) {
     const img = p.querySelector('img');
     if (img && c === pieceColor && t === pieceType) return img.src;
   }
-  return `chesspieces/${pieceColor}-${pieceType}.png`;
+  return `Chess/chesspieces/${pieceColor}-${pieceType}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
