@@ -54,7 +54,8 @@ function getImageForPiece(pieceColor, pieceType) {
   }
   
   // Fallback to local path - adjust this path to match your actual file structure
-  return `chesspieces/${pieceColor}-${pieceType}.png`;
+  const baseUrl = 'https://toff-cowan.github.io/Personal-Website/Chess/chesspieces';
+  return `${baseUrl}/${pieceColor}-${pieceType}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
