@@ -53,22 +53,9 @@ function getImageForPiece(pieceColor, pieceType) {
     }
   }
   
-  // Map piece types to your actual file naming convention
-  const pieceMap = {
-    'pawn': 'P',
-    'rook': 'R', 
-    'knight': 'N',
-    'bishop': 'B',
-    'queen': 'Q',
-    'king': 'K'
-  };
-  
-  const colorPrefix = pieceColor === 'white' ? 'w' : 'b';
-  const pieceLetter = pieceMap[pieceType];
-  
-  // Use GitHub raw content URL with your actual file names
+  // Use GitHub raw content URL with standardized naming
   const baseUrl = 'https://raw.githubusercontent.com/Toff-cowan/Personal-Website/main/Chess/chesspieces';
-  return `${baseUrl}/${colorPrefix}${pieceLetter}.png`;
+  return `${baseUrl}/${pieceColor}-${pieceType}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
