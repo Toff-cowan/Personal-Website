@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Christoff's Portfolio - Chess Game</title>
+  <link rel="stylesheet" type="text/css" href="../Chess/chess.css" />
+  <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ======= NAV BAR ======= -->
+  <div class="nav-bar">
+    <!-- Navigation content will be added here -->
+  </div>
+
+  <!-- ======= BOARD CONTAINER ======= -->
+  <div class="board-container">
+    <!-- Captured by White (on top) -->
+    <div id="capturedTop" class="captured-row">
+      <div class="captured-title"></div>
+      <div id="capturedByBlack" class="captured-list"></div>
+    </div>
+
+    <!-- Chess Board -->
+    <div id="board" class="chessBoard">
+      <!-- 8th Rank -->
+      <div class="square white">
+        <div class="piece rook" color="black">
+          <img src="chesspieces/black-rook.png" alt="Black Rook" class="pieceImage">
+        </div>
+      </div>
+      <div class="square black">
+        <div class="piece knight" color="black">
+          <img src="chesspieces/black-knight.png" alt="Black knight" class="pieceImage">
+        </div>
+      </div>
+      <div class="square white">
+        <div class="piece bishop" color="black">
+          <img src="chesspieces/black-bishop.png" alt="Black bishop" class="pieceImage">
+        </div>
+      </div>
+      <div class="square black">
+        <div class="piece queen" color="black">
+          <img src="chesspieces/black-queen.png" alt="Black queen" class="pieceImage">
+        </div>
+      </div>
+      <div class="square white">
+        <div class="piece king" color="black">
+          <img src="chesspieces/black-king.png" alt="Black King" class="pieceImage">
+        </div>
+      </div>
+      <div class="square black">
+        <div class="piece bishop" color="black">
+          <img src="chesspieces/black-bishop.png" alt="Black bishop" class="pieceImage">
+        </div>
+      </div>
+      <div class="square white">
+        <div class="piece knight" color="black">
+          <img src="chesspieces/black-knight.png" alt="Black knight" class="pieceImage">
+        </div>
+      </div>
+      <div class="square black">
+        <div class="coordinate rank whiteText">8</div>
+        <div class="piece rook" color="black">
+          <img src="chesspieces/black-rook.png" alt="Black Rook" class="pieceImage">
+        </div>
+      </div>
+
+      <!-- 7th Rank (black pawns) -->
+      <div class="square black"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div></div>
+      <div class="square white">
+        <div class="coordinate rank blackText">7</div>
+        <div class="piece pawn" color="black"><img src="chesspieces/black-pawn.png" alt="Black Pawn" class="pieceImage"></div>
+      </div>
+
+      <!-- 6th -->
+      <div class="square white"></div><div class="square black"></div><div class="square white"></div><div class="square black"></div>
+      <div class="square white"></div><div class="square black"></div><div class="square white"></div>
+      <div class="square black"><div class="coordinate rank whiteText">6</div></div>
+
+      <!-- 5th -->
+      <div class="square black"></div><div class="square white"></div><div class="square black"></div><div class="square white"></div>
+      <div class="square black"></div><div class="square white"></div><div class="square black"></div>
+      <div class="square white"><div class="coordinate rank blackText">5</div></div>
+
+      <!-- 4th -->
+      <div class="square white"></div><div class="square black"></div><div class="square white"></div><div class="square black"></div>
+      <div class="square white"></div><div class="square black"></div><div class="square white"></div>
+      <div class="square black"><div class="coordinate rank whiteText">4</div></div>
+
+      <!-- 3rd -->
+      <div class="square black"></div><div class="square white"></div><div class="square black"></div><div class="square white"></div>
+      <div class="square black"></div><div class="square white"></div><div class="square black"></div>
+      <div class="square white"><div class="coordinate rank blackText">3</div></div>
+
+      <!-- 2nd (white pawns) -->
+      <div class="square white"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square black"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square white"><div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div></div>
+      <div class="square black">
+        <div class="coordinate rank whiteText">2</div>
+        <div class="piece pawn" color="white"><img src="chesspieces/white-pawn.png" alt="White Pawn" class="pieceImage"></div>
+      </div>
+
+      <!-- 1st rank -->
+      <div class="square black"><div class="coordinate whiteText">a</div><div class="piece rook" color="white"><img src="chesspieces/white-rook.png" alt="White Rook" class="pieceImage"></div></div>
+      <div class="square white"><div class="coordinate blackText">b</div><div class="piece knight" color="white"><img src="chesspieces/white-knight.png" alt="White knight" class="pieceImage"></div></div>
+      <div class="square black"><div class="coordinate whiteText">c</div><div class="piece bishop" color="white"><img src="chesspieces/white-bishop.png" alt="White bishop" class="pieceImage"></div></div>
+      <div class="square white"><div class="coordinate blackText">d</div><div class="piece queen" color="white"><img src="chesspieces/white-queen.png" alt="White Queen" class="pieceImage"></div></div>
+
+      <div class="square black"><div class="coordinate whiteText">e</div><div class="piece king" color="white"><img src="chesspieces/white-king.png" alt="White King" class="pieceImage"></div></div>
+      <div class="square white"><div class="coordinate blackText">f</div><div class="piece bishop" color="white"><img src="chesspieces/white-bishop.png" alt="White bishop" class="pieceImage"></div></div>
+      <div class="square black"><div class="coordinate whiteText">g</div><div class="piece knight" color="white"><img src="chesspieces/white-knight.png" alt="White knight" class="pieceImage"></div></div>
+      <div class="square white">
+        <div class="coordinate blackText">h</div>
+        <div class="coordinate rank blackText">1</div>
+        <div class="piece rook" color="white"><img src="chesspieces/white-rook.png" alt="White Rook" class="pieceImage"></div>
+      </div>
+    </div>
+
+    <!-- Captured by Black (on bottom) -->
+    <div id="capturedBottom" class="captured-row">
+      <div class="captured-title"></div>
+      <div id="capturedByWhite" class="captured-list"></div>
+    </div>
+  </div>
+
+  <!-- promotion popup -->
+  <div id="promotion-box" class="hidden absolute z-50 bg-white rounded-xl shadow-2xl p-3 flex flex-col gap-3 border border-gray-300">
+    <div id="promotion-options" class="flex flex-col gap-2"></div>
+  </div>
+
+  <!-- ======= RIGHT MENU CARD ======= -->
+  <aside id="menu-card" class="menu-card">
+    <div class="menu-header">
+      <h3>Game Menu</h3>
+    </div>
+
+    <!-- Time control selection -->
+    <div class="time-control">
+      <label for="timeSelect">Time Control</label>
+      <select id="timeSelect">
+        <option value="60">1:00</option>
+        <option value="180">3:00</option>
+        <option value="300" selected>5:00</option>
+        <option value="600">10:00</option>
+        <option value="1800">30:00</option>
+      </select>
+    </div>
+
+    <!-- Start/Pause + loading spinner -->
+    <div class="menu-row">
+      <button id="resignBtn" class="btn danger">Resign</button>
+    </div>
+    
+    <!-- New game button -->
+    <div class="menu-row">
+      <button id="newGameBtn" class="btn danger">New Game</button>
+    </div>
+
+    <!-- Previous move display -->
+    <div class="previous-move">
+      <div class="prev-icon">⟷</div>
+      <div id="prevMoveText">No moves yet</div>
+    </div>
+
+    <!-- Timers displayed -->
+    <div class="timers-compact">
+      <div class="player-timer" id="black-timer">05:00</div>
+      <div class="player-timer" id="white-timer">05:00</div>
+    </div>
+
+    <!-- Move list in menu -->
+    <div class="move-list-header">Move History</div>
+    <div class="move-list-container">
+      <div id="moveList" class="move-list"></div>
+    </div>
+  </aside>
+
+  <!-- Optional alert -->
+  <div id="alert" style="display:none"></div>
+
+  <script src="Chess.js"></script>
+</body>
+</html>
