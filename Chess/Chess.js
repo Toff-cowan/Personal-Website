@@ -54,7 +54,7 @@ function getImageForPiece(pieceColor, pieceType) {
   }
   
   // Fallback to local path - adjust this path to match your actual file structure
-  return `chesspieces/${pieceColor}-${pieceType}.png`;
+  return `Chess/chesspieces/${pieceColor}-${pieceType}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
