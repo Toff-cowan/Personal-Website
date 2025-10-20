@@ -50,7 +50,7 @@ function getImageForPiece(pieceColor, pieceType) {
     const img = p.querySelector('img');
     if (img && c === pieceColor && t === pieceType) return img.src;
   }
-  return `chesspieces/${pieceColor}-${pieceType}.png`;
+  return `chesspieces/${pieceColor.charAt(0).toUpperCase() + pieceColor.slice(1)}-${pieceType.charAt(0).toUpperCase() + pieceType.slice(1)}.png`;
 }
 
 /* ---------- BOARD / PIECE SETUP ---------- */
