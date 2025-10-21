@@ -646,7 +646,7 @@ nav .fa {
 .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100%;
@@ -699,7 +699,7 @@ nav .fa {
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
-    z-index: 2001;
+    z-index: 10000;
 }
 
 .close:hover {
@@ -766,6 +766,7 @@ nav .fa {
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
 }
 
 .hackathon-images img:hover {

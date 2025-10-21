@@ -249,7 +249,7 @@ body {
 }
 
 .black {
-  background-color: #1f2937; /* Darker gray */
+  background-color: #616a76; /* Darker gray */
 }
 
 /* highlight last move squares */
@@ -264,7 +264,7 @@ body {
   width: 20%;
   height: 20%;
   border-radius: 50%;
-  background-color: rgba(35, 28, 67, 0.733);
+  background-color: rgba(47, 0, 255, 0.733);
   z-index: 5;
   pointer-events: none;
 }
@@ -477,7 +477,7 @@ body {
   align-items: stretch;
   user-select: none;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 155px;
+  margin-top: 70px;
 }
 
 .menu-header h3 {
