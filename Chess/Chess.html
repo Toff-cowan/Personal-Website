@@ -18,20 +18,12 @@
   <!-- ======= NAV BAR ======= -->
  <nav>
         <div class="nav-links" id="navLinks">
-            <i class="fa fa-times" onclick="hideMenu()"></i>
             <ul>
                 <li><a href="../index.html">HOME</a></li>
                 <li><a href="../Projects.html">PROJECTS</a></li>
                 <li><a href="../Gallery.html">GALLERY</a></li>
-                <li><a href="Chess.html" class="active">CHESS</a></li>
             </ul>
-            <div class="mobile-social-links">
-                <a href="mailto:christoffcowan10@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
-                <a href="https://github.com/toff-cowan" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/christoff-cowan" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
-            </div>
         </div>
-        <i class="fa fa-bars" onclick="showMenu()"></i>
     </nav>
 
   <!-- ======= BOARD CONTAINER ======= -->
@@ -212,30 +204,5 @@
   <div id="alert" style="display:none"></div>
 
   <script src="Chess.js"></script>
-  
-  <!-- Mobile Navigation JavaScript -->
-  <script>
-    function showMenu() {
-        const navLinks = document.getElementById('navLinks');
-        navLinks.style.right = "0";
-        document.body.style.overflow = "hidden";
-    }
-
-    function hideMenu() {
-        const navLinks = document.getElementById('navLinks');
-        navLinks.style.right = "-300px";
-        document.body.style.overflow = "auto";
-    }
-
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const navLinks = document.getElementById('navLinks');
-        const menuButton = document.querySelector('.fa-bars');
-        
-        if (!navLinks.contains(event.target) && !menuButton.contains(event.target)) {
-            hideMenu();
-        }
-    });
-  </script>
 </body>
 </html>

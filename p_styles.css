@@ -545,6 +545,7 @@ nav .fa {
         box-shadow: -2px 0 15px var(--card-shadow);
         display: flex;
         flex-direction: column;
+        border-left: 1px solid var(--text-primary);
     }
 
     .nav-links ul li {
@@ -580,7 +581,7 @@ nav .fa {
     .mobile-social-links .social-link {
         color: var(--text-primary);
         font-size: 24px;
-        transition: color 0.3s ease, transform 0.3s ease;
+        transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -589,12 +590,22 @@ nav .fa {
         border-radius: 50%;
         background-color: var(--card-bg);
         box-shadow: 0 2px 10px var(--card-shadow);
+        border: 1px solid var(--text-primary);
     }
     
     .mobile-social-links .social-link:hover {
         color: var(--btn-bg);
+        background-color: var(--btn-bg);
+        color: white;
         transform: translateY(-2px);
         box-shadow: 0 4px 15px var(--card-shadow);
+    }
+}
+
+/* Hide social links on desktop and laptop */
+@media (min-width: 769px) {
+    .mobile-social-links {
+        display: none;
     }
 
     .welcome h1 {
