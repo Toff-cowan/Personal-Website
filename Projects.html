@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="dark-mode.js" defer></script>
+    <!-- Fallback dark mode button -->
+    <button id="fallback-dark-mode" onclick="toggleDarkMode()" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: none; background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🌙</button>
 </head>
 <body>
     <nav>
@@ -16,7 +18,7 @@
             <i class="fa fa-times" onclick="hideMenu()"></i>
             <ul>
                 <li><a href="index.html">HOME</a></li>
-                <li><a href="Projects.html">PROJECTS</a></li>
+                <li><a href="Projects.html" class="active">PROJECTS</a></li>
                 <li><a href="Gallery.html">GALLERY</a></li>
             </ul>
         </div>
@@ -88,7 +90,7 @@
     <main class="projects-container">
         <div class="project-card" onclick="toggleProject(this)">
             <div class="card-front">
-                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')"></div>
+                <div class="project-image" style="background-image: url('Pictures/Projects.jpg')"></div>
                 <div class="project-info">
                     <h3>Portfolio Website</h3>
                     <p class="project-status completed">Completed</p>
@@ -114,7 +116,7 @@
 <!-- Commerce Card-->
         <div class="project-card" onclick="toggleProject(this)">
             <div class="card-front">
-                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')"></div>
+                <div class="project-image" style="background-image: url('Pictures/Final Project Design.jpg')"></div>
                 <div class="project-info">
                     <h3>E-commerce Dashboard</h3>
                     <p class="project-status completed">Completed</p>

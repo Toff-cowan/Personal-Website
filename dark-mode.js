@@ -7,14 +7,20 @@ class DarkModeToggle {
     }
 
     init() {
-        // Apply saved theme on page load
-        this.applyTheme(this.currentTheme);
-        
-        // Create toggle button
-        this.createToggleButton();
-        
-        // Add event listener
-        this.addEventListeners();
+        try {
+            // Apply saved theme on page load
+            this.applyTheme(this.currentTheme);
+            
+            // Create toggle button
+            this.createToggleButton();
+            
+            // Add event listener
+            this.addEventListeners();
+            
+            console.log('Dark mode initialized successfully');
+        } catch (error) {
+            console.error('Error initializing dark mode:', error);
+        }
     }
 
     createToggleButton() {
@@ -111,7 +117,13 @@ class DarkModeToggle {
     }
 
     applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
+        try {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+            console.log('Theme applied:', theme);
+        } catch (error) {
+            console.error('Error applying theme:', error);
+        }
     }
 
     saveTheme(theme) {
@@ -132,16 +144,51 @@ class DarkModeToggle {
     }
 }
 
-// Initialize dark mode toggle when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new DarkModeToggle();
-});
-
-// Also initialize if DOM is already loaded (for dynamic content)
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new DarkModeToggle();
-    });
-} else {
+// Initialize dark mode toggle
+function initDarkMode() {
+    // Check if already initialized
+    if (document.getElementById('theme-toggle')) {
+        return;
+    }
     new DarkModeToggle();
 }
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDarkMode);
+} else {
+    // DOM is already loaded
+    initDarkMode();
+}
+
+// Also initialize after a short delay to ensure everything is loaded
+setTimeout(initDarkMode, 100);
+
+// Fallback initialization
+window.addEventListener('load', function() {
+    if (!document.getElementById('theme-toggle')) {
+        console.log('Fallback dark mode initialization');
+        initDarkMode();
+        
+        // Show fallback button if main toggle still doesn't exist
+        setTimeout(() => {
+            if (!document.getElementById('theme-toggle')) {
+                const fallbackBtn = document.getElementById('fallback-dark-mode');
+                if (fallbackBtn) {
+                    fallbackBtn.style.display = 'block';
+                    console.log('Showing fallback dark mode button');
+                }
+            }
+        }, 1000);
+    }
+});
+
+// Simple fallback dark mode toggle
+window.toggleDarkMode = function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    document.body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    console.log('Theme toggled to:', newTheme);
+};
