@@ -607,6 +607,11 @@ nav .fa {
     .mobile-social-links {
         display: none;
     }
+    
+    /* Hide social links in navigation for desktop/laptop */
+    .nav-links .mobile-social-links {
+        display: none !important;
+    }
 
     .welcome h1 {
         font-size: 2.5rem;

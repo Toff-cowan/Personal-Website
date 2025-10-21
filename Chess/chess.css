@@ -90,6 +90,65 @@ body {
   }
 }
 
+/* ========== MOBILE LANDSCAPE ORIENTATION ========== */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    flex-direction: row;
+    padding: 5px;
+    gap: 10px;
+    padding-top: 60px;
+  }
+  
+  .board-container {
+    order: 1;
+    width: 60%;
+    max-width: 60vw;
+    margin: 0;
+  }
+  
+  .chessboard {
+    width: 60vw !important;
+    height: 60vw !important;
+    max-width: 300px;
+    max-height: 300px;
+  }
+  
+  .game-info {
+    order: 2;
+    width: 40%;
+    max-width: 40vw;
+    margin: 0;
+    padding: 10px;
+  }
+  
+  .player-info {
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .player-name {
+    font-size: 14px;
+  }
+  
+  .player-timer {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  .move-list-container {
+    max-height: 150px;
+  }
+  
+  .move-list {
+    font-size: 10px;
+  }
+  
+  .captured-piece {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
 /* ========== NAV BAR ========== */
 .nav-links {
   position: fixed;
