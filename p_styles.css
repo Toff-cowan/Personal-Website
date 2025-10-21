@@ -248,6 +248,134 @@ nav .fa {
     flex-wrap: wrap;
 }
 
+/* Service Showcase */
+.service-showcase {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.service-card-mini {
+    background: linear-gradient(135deg, var(--btn-primary), var(--btn-hover));
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px var(--card-shadow);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.service-card-mini:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px var(--card-shadow-hover);
+}
+
+.service-card-mini .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.service-card-mini h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.service-card-mini p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.service-card-mini .service-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.service-card-mini .feature-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.service-card-mini .service-price {
+    margin-bottom: 1.5rem;
+}
+
+.service-card-mini .price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.service-card-mini .price-jmd {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: 0.5rem;
+}
+
+.service-btn {
+    background-color: white;
+    color: var(--btn-primary);
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.service-btn:hover {
+    background-color: var(--btn-hover);
+    color: white;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .service-card-mini {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .service-card-mini h3 {
+        font-size: 1.1rem;
+    }
+    
+    .service-card-mini p {
+        font-size: 0.9rem;
+    }
+    
+    /* Mobile pricing adjustments for service card */
+    .service-card-mini .service-price {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        align-items: center;
+    }
+    
+    .service-card-mini .price {
+        font-size: 1rem;
+    }
+    
+    .service-card-mini .price-jmd {
+        font-size: 0.85rem;
+        margin-left: 0;
+        text-align: center;
+    }
+}
+
 /* Social Icons */
 .social-icons {
     margin-top: 40px;
