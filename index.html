@@ -8,12 +8,48 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="dark-mode.js" defer></script>
     <!-- Fallback dark mode button -->
     <button id="fallback-dark-mode" onclick="toggleDarkMode()" style="position: fixed; bottom: 20px; right: 20px; z-index: 1001; display: none; background: #007bff; color: white; border: none; padding: 10px; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 18px;">🌙</button>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-container">
+            <div class="loading-logo">
+                <h1>Christoff Cowan</h1>
+                <p class="loading-subtitle">Portfolio Loading...</p>
+            </div>
+            
+            <div class="loading-content">
+                <div class="typing-text">
+                    <span id="typingText"></span>
+                    <span class="cursor">|</span>
+                </div>
+                
+                <div class="loading-bar-container">
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="loadingProgress"></div>
+                    </div>
+                    <div class="loading-percentage" id="loadingPercentage">0%</div>
+                </div>
+                
+                <div class="loading-status" id="loadingStatus">Initializing...</div>
+            </div>
+            
+            <div class="loading-controls">
+                <button id="skipLoading" class="skip-btn">Skip Loading</button>
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="theme-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="nav-links" id="navLinks">
@@ -167,6 +203,128 @@
     </footer>
 
     <!-- Scripts -->
+    <script>
+        // Loading Screen Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const typingText = document.getElementById('typingText');
+            const loadingProgress = document.getElementById('loadingProgress');
+            const loadingPercentage = document.getElementById('loadingPercentage');
+            const loadingStatus = document.getElementById('loadingStatus');
+            const skipBtn = document.getElementById('skipLoading');
+            const themeBtn = document.getElementById('themeToggle');
+
+            // Loading messages with typing effect
+            const loadingMessages = [
+                "Initializing portfolio system...",
+                "Loading personal projects...",
+                "Setting up navigation...",
+                "Preparing multidimensional features...",
+                "Configuring dark mode...", 
+                "Optimizing visual aesthetics...",
+                "Baking a cake...",
+                "Adding the icing...",
+                "Almost ready...",
+                "Welcome to my portfolio!"
+            ];
+
+            let currentMessageIndex = 0;
+            let currentCharIndex = 0;
+            let isTyping = true;
+            let loadingProgressValue = 0;
+            let loadingComplete = false;
+
+            // Typing animation
+            function typeText() {
+                if (currentMessageIndex < loadingMessages.length) {
+                    const currentMessage = loadingMessages[currentMessageIndex];
+                    
+                    if (currentCharIndex < currentMessage.length) {
+                        typingText.textContent += currentMessage[currentCharIndex];
+                        currentCharIndex++;
+                        setTimeout(typeText, 50 + Math.random() * 100); // Random typing speed
+                    } else {
+                        // Message complete, wait then move to next
+                        setTimeout(() => {
+                            currentMessageIndex++;
+                            currentCharIndex = 0;
+                            typingText.textContent = '';
+                            
+                            // Update progress
+                            loadingProgressValue = (currentMessageIndex / loadingMessages.length) * 100;
+                            loadingProgress.style.width = loadingProgressValue + '%';
+                            loadingPercentage.textContent = Math.round(loadingProgressValue) + '%';
+                            loadingStatus.textContent = loadingMessages[currentMessageIndex - 1];
+                            
+                            if (currentMessageIndex < loadingMessages.length) {
+                                typeText();
+                            } else {
+                                // Loading complete
+                                loadingComplete = true;
+                                setTimeout(() => {
+                                    hideLoadingScreen();
+                                }, 2000);
+                            }
+                        }, 800);
+                    }
+                }
+            }
+
+            // Hide loading screen
+            function hideLoadingScreen() {
+                loadingScreen.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                
+                // Remove loading screen from DOM after animation
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 500);
+            }
+
+            // Skip loading functionality
+            skipBtn.addEventListener('click', function() {
+                if (!loadingComplete) {
+                    loadingComplete = true;
+                    hideLoadingScreen();
+                }
+            });
+
+            // Theme toggle functionality
+            themeBtn.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                
+                // Update icon
+                const icon = themeBtn.querySelector('i');
+                icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                
+                // Store theme preference
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // Initialize theme from localStorage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = themeBtn.querySelector('i');
+            icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+            // Start typing animation after a short delay
+            setTimeout(() => {
+                typeText();
+            }, 500);
+
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                if (!loadingComplete) {
+                    loadingComplete = true;
+                    hideLoadingScreen();
+                }
+            }, 15000);
+        });
+    </script>
+
     <script>
         const navLinks = document.getElementById("navLinks");
 
