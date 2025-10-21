@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="dark-mode.js" defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -18,6 +19,7 @@
             <ul>
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="Projects.html">PROJECTS</a></li>
+                <li><a href="Gallery.html">GALLERY</a></li>
             </ul>
         </div>
         <i class="fa fa-bars" onclick="showMenu()"></i>
@@ -72,20 +74,53 @@
             <div class="slider-dots"></div>
         </div>
 
+        <!-- Meet the Builder Section -->
+        <div class="builder-section">
+            <div class="builder-content">
+                <h2>About Me</h2>
+                <div class="builder-layout">
+                    <div class="builder-text">
+                        <h3>Christoff Cowan</h3>
+                        <p class="builder-role">Electronics and Computer Science Student & Web Developer</p>
+                        <p class="builder-description">Hi! I'm Christoff Cowan, a passionate student double majoring in computer science student at the University of The West Indies. I love creating innovative solutions and bringing ideas to life through code. This website showcases my journey in technology and my commitment to continuous learning.</p>
+                        <p class="builder-description">When I'm not coding, you can find me exploring new technologies, working on personal projects, or contributing to the tech community or playing sports. I believe in the power of technology to solve real-world problems and make a positive impact.</p>
+                        <div class="builder-stats">
+                            <div class="stat">
+                                <h4>7+</h4>
+                                <p>Years Coding</p>
+                            </div>
+                            <div class="stat">
+                                <h4>10+</h4>
+                                <p>Projects Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="builder-image-container floating">
+                        <img src="Pictures/IMG_7026.JPG" alt="Christoff Cowan - Portrait" class="builder-image">
+                        <div class="image-overlay">
+                            <h3>Christoff Cowan</h3>
+                            <p>Electronics and Computer Science Student</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Links + Socials + Resume -->
         <div class="welcome-section">
             <div class="welcome">
                 <p>Feel free to check out my projects and social media accounts below.</p>
-                <a href="Projects.html" class="btn">PROJECTS</a>
+                
+                <div class="button-group">
+                    <a href="Projects.html" class="btn">PROJECTS</a>
+                    <a href="Resume/CV_Christoff_Cowan.pdf" target="_blank" class="btn">VIEW RESUME</a>
+                </div>
 
                 <div class="social-icons">
                     <a href="https://www.instagram.com/_toff_24/" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.linkedin.com/in/christoff-cowan-0995752a0/" target="_blank"><i class="fab fa-linkedin"></i></a>
                     <a href="https://github.com/Toff-cowan" target="_blank"><i class="fab fa-github"></i></a>
                 </div>
-
-                <!-- Resume Buttons -->
-                <a href="Resume/CV_Christoff_Cowan.pdf" target="_blank" class="btn">VIEW RESUME</a>
             </div>
         </div>
     </section>
@@ -95,8 +130,6 @@
         <div class="container">
             <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
             <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
                 <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
             </div>
         </div>

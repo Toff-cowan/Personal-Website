@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Christoff's Portfolio</title>
+    <link rel="stylesheet" href="a_styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="dark-mode.js" defer></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-links" id="navLinks">
+            <i class="fa fa-times" onclick="hideMenu()"></i>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="Projects.html">PROJECTS</a></li>
+                <li><a href="Gallery.html" class="active">GALLERY</a></li>
+            </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+
+    <main class="gallery-main">
+        <header class="gallery-header">
+            <div class="header-content">
+                <h1>Gallery</h1>
+                <p>Explore my visual journey and creative works</p>
+            </div>
+        </header>
+
+        <section class="gallery-section">
+            <div class="gallery-scroll-container">
+                <div class="gallery-container">
+                    <!-- Intellibus AI Hackathon 2025 -->
+                    <div class="gallery-item floating" onclick="openHackathonModal()">
+                        <div class="gallery-image">
+                            <img src="Pictures/IMG-20251020-WA0002.jpg" alt="Intellibus AI Hackathon 2025">
+                            <div class="gallery-overlay">
+                                <h3>Intellibus AI Hackathon 2025</h3>
+                                <p>Click to view all photos</p>
+                            </div>
+                        </div>
+                        <div class="gallery-content">
+                            <h3>Intellibus AI Hackathon 2025</h3>
+                            <p>Documentation of my participation in the Intellibus AI Hackathon 2025. This collection showcases my involvement in cutting-edge AI technology competitions and my commitment to innovation in artificial intelligence.</p>
+                            <div class="gallery-tags">
+                                <span>AI Hackathon</span>
+                                <span>Innovation</span>
+                                <span>Technology</span>
+                                <span>Competition</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Image Preview -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
+    </div>
+
+    <!-- Hackathon Gallery Modal -->
+    <div id="hackathonModal" class="modal">
+        <span class="close" onclick="closeHackathonModal()">&times;</span>
+        <div class="hackathon-gallery">
+            <h2>Intellibus AI Hackathon 2025</h2>
+            <div class="hackathon-images">
+                <img src="Pictures/IMG-20251020-WA0002.jpg" alt="Hackathon Photo 1" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0003.jpg" alt="Hackathon Photo 2" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0004.jpg" alt="Hackathon Photo 3" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0005.jpg" alt="Hackathon Photo 4" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0006.jpg" alt="Hackathon Photo 5" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0007.jpg" alt="Hackathon Photo 6" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0008.jpg" alt="Hackathon Photo 7" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0009.jpg" alt="Hackathon Photo 8" onclick="openModalFromHackathon(this)">
+                <img src="Pictures/IMG-20251020-WA0010.jpg" alt="Hackathon Photo 9" onclick="openModalFromHackathon(this)">
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Christoff Cowan. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="mailto:christoffcowan10@gmail.com">Contact Me</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for mobile menu and gallery functionality -->
+    <script>
+        // Mobile menu toggle
+        const navLinks = document.getElementById("navLinks");
+        
+        function showMenu() {
+            navLinks.style.right = "0";
+            document.body.style.overflow = "hidden";
+        }
+        
+        function hideMenu() {
+            navLinks.style.right = "-300px";
+            document.body.style.overflow = "auto";
+        }
+
+        // Gallery modal functionality
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const caption = document.getElementById('modalCaption');
+            const img = element.querySelector('img');
+            const title = element.querySelector('.gallery-content h3').textContent;
+            const description = element.querySelector('.gallery-content p').textContent;
+            
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            caption.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        // Hackathon modal functionality
+        function openHackathonModal() {
+            document.getElementById('hackathonModal').style.display = "block";
+        }
+
+        function closeHackathonModal() {
+            document.getElementById('hackathonModal').style.display = "none";
+        }
+
+        function openModalFromHackathon(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const caption = document.getElementById('modalCaption');
+            
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Hackathon documentation photo</p>`;
+        }
+
+        // Automatic scrolling
+        function startAutoScroll() {
+            const scrollContainer = document.querySelector('.gallery-scroll-container');
+            if (scrollContainer) {
+                let scrollAmount = 0;
+                const scrollSpeed = 1; // pixels per frame
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                
+                function autoScroll() {
+                    scrollAmount += scrollSpeed;
+                    if (scrollAmount >= maxScroll) {
+                        scrollAmount = 0; // Reset to beginning
+                    }
+                    scrollContainer.scrollLeft = scrollAmount;
+                    requestAnimationFrame(autoScroll);
+                }
+                
+                // Start auto scroll after a short delay
+                setTimeout(autoScroll, 2000);
+            }
+        }
+
+        // Close modal when clicking outside or on the image
+        document.getElementById('imageModal').addEventListener('click', function(event) {
+            if (event.target === this || event.target.classList.contains('modal-content')) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('hackathonModal').addEventListener('click', function(event) {
+            if (event.target === this || event.target.classList.contains('hackathon-gallery')) {
+                closeHackathonModal();
+            }
+        });
+
+        // Start auto scroll when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            startAutoScroll();
+        });
+    </script>
+</body>
+</html>
