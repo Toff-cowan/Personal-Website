@@ -20,7 +20,6 @@
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="Projects.html">PROJECTS</a></li>
                 <li><a href="Gallery.html" class="active">GALLERY</a></li>
-                <li><a href="Chess/Chess.html">CHESS</a></li>
             </ul>
             <div class="mobile-social-links">
                 <a href="mailto:christoffcowan10@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
@@ -64,6 +63,10 @@
                     </div>
                 </div>
             </div>
+            <!-- Scroll back button -->
+            <button id="scrollBackBtn" class="scroll-back-btn" onclick="resetGalleryScroll()" title="Scroll back to beginning">
+                <i class="fas fa-arrow-left"></i>
+            </button>
         </section>
     </main>
 
@@ -154,25 +157,47 @@
             caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Hackathon documentation photo</p>`;
         }
 
-        // Automatic scrolling
+        // Automatic scrolling with pause/resume
+        let autoScrollInterval = null;
+        let isAutoScrolling = true;
+        let scrollAmount = 0;
+        let scrollSpeed = 1;
+        let maxScroll = 0;
+        
         function startAutoScroll() {
             const scrollContainer = document.querySelector('.gallery-scroll-container');
             if (scrollContainer) {
-                let scrollAmount = 0;
-                const scrollSpeed = 1; // pixels per frame
-                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+                maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
                 
                 function autoScroll() {
-                    scrollAmount += scrollSpeed;
-                    if (scrollAmount >= maxScroll) {
-                        scrollAmount = 0; // Reset to beginning
+                    if (isAutoScrolling) {
+                        scrollAmount += scrollSpeed;
+                        if (scrollAmount >= maxScroll) {
+                            scrollAmount = 0; // Reset to beginning
+                        }
+                        scrollContainer.scrollLeft = scrollAmount;
                     }
-                    scrollContainer.scrollLeft = scrollAmount;
                     requestAnimationFrame(autoScroll);
                 }
                 
                 // Start auto scroll after a short delay
                 setTimeout(autoScroll, 2000);
+            }
+        }
+        
+        function pauseAutoScroll() {
+            isAutoScrolling = false;
+        }
+        
+        function resumeAutoScroll() {
+            isAutoScrolling = true;
+        }
+        
+        function resetGalleryScroll() {
+            const scrollContainer = document.querySelector('.gallery-scroll-container');
+            if (scrollContainer) {
+                scrollContainer.scrollLeft = 0;
+                scrollAmount = 0;
             }
         }
 
@@ -189,9 +214,62 @@
             }
         });
 
-        // Start auto scroll when page loads
+        // Touch swiping for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isScrolling = false;
+        
+        function handleTouchStart(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isScrolling = false;
+            pauseAutoScroll();
+        }
+        
+        function handleTouchMove(e) {
+            if (!touchStartX || !touchStartY) return;
+            
+            const touchCurrentX = e.touches[0].clientX;
+            const touchCurrentY = e.touches[0].clientY;
+            
+            const diffX = touchStartX - touchCurrentX;
+            const diffY = touchStartY - touchCurrentY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal swipe
+                isScrolling = true;
+                const scrollContainer = document.querySelector('.gallery-scroll-container');
+                if (scrollContainer) {
+                    scrollContainer.scrollLeft += diffX;
+                }
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (isScrolling) {
+                // Resume auto scroll after a delay
+                setTimeout(() => {
+                    resumeAutoScroll();
+                }, 3000);
+            } else {
+                resumeAutoScroll();
+            }
+            
+            touchStartX = 0;
+            touchStartY = 0;
+            isScrolling = false;
+        }
+        
+        // Add touch event listeners
         document.addEventListener('DOMContentLoaded', function() {
             startAutoScroll();
+            
+            const scrollContainer = document.querySelector('.gallery-scroll-container');
+            if (scrollContainer) {
+                scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+                scrollContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+                scrollContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
+            }
         });
     </script>
 </body>

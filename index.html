@@ -22,7 +22,6 @@
                 <li><a href="index.html" class="active">HOME</a></li>
                 <li><a href="Projects.html">PROJECTS</a></li>
                 <li><a href="Gallery.html">GALLERY</a></li>
-                <li><a href="Chess/Chess.html">CHESS</a></li>
             </ul>
             <div class="mobile-social-links">
                 <a href="mailto:christoffcowan10@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
@@ -233,6 +232,19 @@
                 resetAutoScroll();
             }
         });
+
+        // Mobile navigation functions
+        function showMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.style.right = "0";
+            document.body.style.overflow = "hidden";
+        }
+
+        function hideMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.style.right = "-300px";
+            document.body.style.overflow = "auto";
+        }
 
         // Hide navbar on scroll
         let lastScroll = 0;

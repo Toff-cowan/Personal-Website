@@ -762,6 +762,44 @@ nav .fa {
     animation-play-state: paused;
 }
 
+/* Scroll back button */
+.scroll-back-btn {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    background: var(--btn-bg);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 12px var(--btn-shadow);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0.8;
+}
+
+.scroll-back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--btn-shadow);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .scroll-back-btn {
+        bottom: 70px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+}
+
 /* Responsive Gallery */
 @media (max-width: 768px) {
     .gallery-item {
