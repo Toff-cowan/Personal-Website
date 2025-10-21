@@ -6,7 +6,11 @@ body {
   align-items: flex-start;
   justify-content: center;
   min-height: 95vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  background: #0f172a;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
   font-family: "Lato", sans-serif;
   gap: 30px;
   padding: 30px;
@@ -29,22 +33,25 @@ body {
     width: 100%;
     max-width: 90vw;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  .chessboard {
+  .chessBoard {
     width: 90vw !important;
     height: 90vw !important;
     max-width: 400px;
     max-height: 400px;
   }
   
-  .chessboard .square {
+  .chessBoard .square {
     width: calc(100% / 8) !important;
     height: calc(100% / 8) !important;
     font-size: 3vw;
   }
   
-  .chessboard .square img {
+  .chessBoard .square img {
     width: 80% !important;
     height: 80% !important;
   }
@@ -104,9 +111,12 @@ body {
     width: 60%;
     max-width: 60vw;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  .chessboard {
+  .chessBoard {
     width: 60vw !important;
     height: 60vw !important;
     max-width: 300px;
@@ -233,13 +243,13 @@ body {
   box-sizing: border-box;
 }
 
-/* NEW CHESS BOARD COLORS - Navy Blue & Bone White */
+/* DARK THEME CHESS BOARD COLORS */
 .white {
-  background-color: #f8f4e6; /* Bone white */
+  background-color: #374151; /* Dark gray */
 }
 
 .black {
-  background-color: #1e3a8a; /* Navy blue */
+  background-color: #1f2937; /* Darker gray */
 }
 
 /* highlight last move squares */
