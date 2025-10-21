@@ -41,7 +41,7 @@ class DarkModeToggle {
                 bottom: 20px;
                 right: 20px;
                 z-index: 1002;
-                background: var(--btn-primary);
+                background: var(--btn-bg, #007bff);
                 color: white;
                 border: none;
                 padding: 10px;

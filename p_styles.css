@@ -30,6 +30,9 @@
     --tech-tag-bg: #e0e7ff;
     --tech-tag-text: #001f3f;
     --grid-color: rgba(0, 6, 70, 0.275);
+    --btn-bg: #007bff;
+    --btn-primary: #007bff;
+    --btn-hover: #0056b3;
 }
 
 [data-theme="dark"] {
@@ -63,6 +66,9 @@
     --tech-tag-bg: #1e3a8a;
     --tech-tag-text: #93c5fd;
     --grid-color: rgba(255, 255, 255, 0.05);
+    --btn-bg: #4d9de0;
+    --btn-primary: #4d9de0;
+    --btn-hover: #6bb6ff;
 }
 
 * {
