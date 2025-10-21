@@ -4,6 +4,11 @@ const castlingSquares = ["g1", "g8", "c1", "c8"];
 let isWhiteTurn = true;
 const boardSquares = document.getElementsByClassName("square");
 
+/* ---------- Mobile touch support ---------- */
+let touchStartSquare = null;
+let touchStartTime = 0;
+let isDragging = false;
+
 const boardElement = document.getElementById("board");
 const promotionBox = document.getElementById("promotion-box");
 const promotionOptions = document.getElementById("promotion-options");
@@ -59,6 +64,10 @@ function setupBoardSquares() {
     boardSquares[i].addEventListener("dragover", allowDrop);
     boardSquares[i].addEventListener("drop", drop);
     boardSquares[i].addEventListener("click", handleSquareClick);
+    // Mobile touch support
+    boardSquares[i].addEventListener("touchstart", handleTouchStart, { passive: false });
+    boardSquares[i].addEventListener("touchend", handleTouchEnd, { passive: false });
+    boardSquares[i].addEventListener("touchmove", handleTouchMove, { passive: false });
     let row = 8 - Math.floor(i / 8);
     let column = String.fromCharCode(97 + (i % 8));
     boardSquares[i].id = column + row;
@@ -1563,3 +1572,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Chess board initialized successfully!");
 });
+
+/* ---------- MOBILE TOUCH HANDLERS ---------- */
+function handleTouchStart(event) {
+  event.preventDefault();
+  const square = event.currentTarget;
+  const squareId = square.id;
+  
+  touchStartSquare = squareId;
+  touchStartTime = Date.now();
+  isDragging = false;
+  
+  // If there's a piece on this square, select it
+  const piece = square.querySelector('.piece');
+  if (piece) {
+    handlePieceClick({ currentTarget: piece });
+  }
+}
+
+function handleTouchMove(event) {
+  event.preventDefault();
+  isDragging = true;
+}
+
+function handleTouchEnd(event) {
+  event.preventDefault();
+  const square = event.currentTarget;
+  const squareId = square.id;
+  const touchDuration = Date.now() - touchStartTime;
+  
+  // Only trigger move if it's a quick tap (not a drag) and we have a selected piece
+  if (touchDuration < 300 && !isDragging && selectedPiece && legalMoves.includes(squareId)) {
+    const piece = document.getElementById(selectedPiece.pieceId);
+    executeMove(selectedPiece.squareId, squareId, piece);
+  }
+  
+  // Clear selection after touch
+  setTimeout(() => {
+    clearSelection();
+  }, 100);
+  
+  touchStartSquare = null;
+  isDragging = false;
+}
