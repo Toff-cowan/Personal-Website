@@ -1335,6 +1335,8 @@ nav .fa {
 /* Floating Animation */
 .floating-skill {
     animation: floatSkills 6s ease-in-out infinite;
+    -webkit-animation: floatSkills 6s ease-in-out infinite;
+    -moz-animation: floatSkills 6s ease-in-out infinite;
 }
 
 .floating-skill:nth-child(2n) {
@@ -1368,6 +1370,25 @@ nav .fa {
         transform: translateY(-5px) rotate(0deg); 
     }
     75% { 
+        transform: translateY(-15px) rotate(-1deg); 
+    }
+}
+
+@-webkit-keyframes floatSkills {
+    0%, 100% { 
+        -webkit-transform: translateY(0px) rotate(0deg); 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    25% { 
+        -webkit-transform: translateY(-10px) rotate(1deg); 
+        transform: translateY(-10px) rotate(1deg); 
+    }
+    50% { 
+        -webkit-transform: translateY(-5px) rotate(0deg); 
+        transform: translateY(-5px) rotate(0deg); 
+    }
+    75% { 
+        -webkit-transform: translateY(-15px) rotate(-1deg); 
         transform: translateY(-15px) rotate(-1deg); 
     }
 }
