@@ -80,6 +80,8 @@ function setupPieces() {
   for (let i = 0; i < pieces.length; i++) {
     pieces[i].addEventListener("dragstart", drag);
     pieces[i].addEventListener("click", handlePieceClick);
+    // Add touch support for pieces
+    pieces[i].addEventListener("touchstart", handlePieceTouch, { passive: false });
     pieces[i].setAttribute("draggable", true);
     if (!pieces[i].id) {
       const type = pieces[i].classList[1] || "piece";
@@ -90,6 +92,14 @@ function setupPieces() {
   for (let i = 0; i < piecesImages.length; i++) {
     piecesImages[i].setAttribute("draggable", false);
   }
+}
+
+/* ---------- Mobile touch support for pieces ---------- */
+function handlePieceTouch(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const piece = event.currentTarget;
+  handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
 }
 
 /* ---------- Board array filling ---------- */
@@ -1241,6 +1251,9 @@ function isInsufficientMaterial() {
 
 /* ---------- Timer formatting / updates ---------- */
 function formatTime(seconds) {
+  if (seconds === 0 || seconds < 0) {
+    return "∞";
+  }
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return `${mins}:${secs.toString().padStart(2, "0")}`;
@@ -1264,6 +1277,12 @@ function updateTimers() {
 function startGameTimer() {
   if (isRunning && timerInterval) return; // Already running
   
+  // Don't start timer if time is 0 (no time mode)
+  if (whiteTime === 0 && blackTime === 0) {
+    isRunning = false;
+    return;
+  }
+  
   isRunning = true;
   clearInterval(timerInterval);
   setTimerVisualActive();
@@ -1271,17 +1290,28 @@ function startGameTimer() {
   console.log("Game timer started. Active color:", activeColor);
   
   timerInterval = setInterval(() => {
+    // Don't count down if in no time mode
+    if (whiteTime === 0 && blackTime === 0) {
+      clearInterval(timerInterval);
+      isRunning = false;
+      return;
+    }
+    
     if (activeColor === "white") {
-      whiteTime--;
-      if (whiteTime <= 0) {
-        endGame("Black wins on time!");
-        return;
+      if (whiteTime > 0) {
+        whiteTime--;
+        if (whiteTime <= 0) {
+          endGame("Black wins on time!");
+          return;
+        }
       }
     } else {
-      blackTime--;
-      if (blackTime <= 0) {
-        endGame("White wins on time!");
-        return;
+      if (blackTime > 0) {
+        blackTime--;
+        if (blackTime <= 0) {
+          endGame("White wins on time!");
+          return;
+        }
       }
     }
     updateTimers();
@@ -1328,6 +1358,15 @@ timeSelect.addEventListener('change', function() {
   const selectedTime = parseInt(this.value, 10);
   whiteTime = selectedTime;
   blackTime = selectedTime;
+  
+  // Stop timer if switching to no time mode
+  if (selectedTime === 0) {
+    clearInterval(timerInterval);
+    isRunning = false;
+    whiteTimerEl.classList.remove('active');
+    blackTimerEl.classList.remove('active');
+  }
+  
   updateTimers();
   saveGameState();
 });
@@ -1340,6 +1379,15 @@ newGameBtn.addEventListener('click', () => {
   const selected = parseInt(timeSelect.value, 10);
   whiteTime = selected;
   blackTime = selected;
+  
+  // Stop timer if no time mode
+  if (selected === 0) {
+    clearInterval(timerInterval);
+    isRunning = false;
+    whiteTimerEl.classList.remove('active');
+    blackTimerEl.classList.remove('active');
+  }
+  
   updateTimers();
   
   moves = [];
@@ -1576,6 +1624,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ---------- MOBILE TOUCH HANDLERS ---------- */
 function handleTouchStart(event) {
   event.preventDefault();
+  event.stopPropagation();
   const square = event.currentTarget;
   const squareId = square.id;
   
@@ -1583,35 +1632,65 @@ function handleTouchStart(event) {
   touchStartTime = Date.now();
   isDragging = false;
   
-  // If there's a piece on this square, select it
+  // If there's a piece on this square and it's the player's turn, select it
   const piece = square.querySelector('.piece');
   if (piece) {
-    handlePieceClick({ currentTarget: piece });
+    const pieceColor = piece.getAttribute("color");
+    // Only select if it's the correct player's turn
+    if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === "black")) {
+      handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
+    }
   }
 }
 
 function handleTouchMove(event) {
-  event.preventDefault();
-  isDragging = true;
+  // Mark as dragging if moved significantly
+  if (touchStartSquare && event.touches.length > 0) {
+    const touch = event.touches[0];
+    const square = event.currentTarget;
+    const rect = square.getBoundingClientRect();
+    // Check if touch moved outside the square significantly
+    const threshold = 10; // pixels
+    if (touch.clientX < rect.left - threshold || touch.clientX > rect.right + threshold || 
+        touch.clientY < rect.top - threshold || touch.clientY > rect.bottom + threshold) {
+      isDragging = true;
+    }
+  }
 }
 
 function handleTouchEnd(event) {
   event.preventDefault();
+  event.stopPropagation();
   const square = event.currentTarget;
   const squareId = square.id;
   const touchDuration = Date.now() - touchStartTime;
   
-  // Only trigger move if it's a quick tap (not a drag) and we have a selected piece
-  if (touchDuration < 300 && !isDragging && selectedPiece && legalMoves.includes(squareId)) {
-    const piece = document.getElementById(selectedPiece.pieceId);
-    executeMove(selectedPiece.squareId, squareId, piece);
+  // If it was a quick tap (not a drag)
+  if (touchDuration < 500 && !isDragging) {
+    // If we have a selected piece and this square is a legal move, execute it
+    if (selectedPiece && legalMoves.includes(squareId)) {
+      const piece = document.getElementById(selectedPiece.pieceId);
+      if (piece) {
+        executeMove(selectedPiece.squareId, squareId, piece);
+        clearSelection();
+      }
+    } else {
+      // If no piece selected yet, try to select piece on this square
+      const piece = square.querySelector('.piece');
+      if (piece) {
+        const pieceColor = piece.getAttribute("color");
+        if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === "black")) {
+          handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
+        }
+      } else {
+        // Tap on empty square with no selection - clear selection
+        clearSelection();
+      }
+    }
   }
   
-  // Clear selection after touch
-  setTimeout(() => {
-    clearSelection();
-  }, 100);
-  
+  // Reset touch state
   touchStartSquare = null;
   isDragging = false;
+  touchStartTime = 0;
 }
