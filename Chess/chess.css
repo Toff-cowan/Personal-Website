@@ -100,39 +100,18 @@ body {
   }
   
   .menu-card {
-    display: none; /* Hide desktop menu on mobile */
+    display: none !important; /* Hide desktop menu on mobile */
   }
 
-  /* Show mobile timers on sides */
+  /* Side timers are hidden - we use top/bottom timers instead */
   .mobile-timer-left,
   .mobile-timer-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-  }
-
-  .mobile-timer-left {
-    left: -70px;
-  }
-
-  .mobile-timer-right {
-    right: -70px;
+    display: none !important;
   }
   
-  .mobile-timer {
-    min-width: 60px;
-    height: 120px;
-    font-size: 1rem;
-    padding: 15px 8px;
-  }
-
   .board-container {
     position: relative;
-    padding: 20px 80px; /* Extra padding for timers */
+    padding: 20px 15px; /* Normal padding - no extra for side timers */
   }
   
   .menu-header h3 {
@@ -455,10 +434,27 @@ nav .fa {
   width: 100%;
 }
 
+/* ========== DESKTOP: HIDE ALL MOBILE FEATURES ========== */
 /* Mobile timers on sides */
 .mobile-timer-left,
 .mobile-timer-right {
-  display: none;
+  display: none !important;
+}
+
+/* Mobile timer cards (top/bottom) */
+.mobile-timer-top-card,
+.mobile-timer-bottom-card {
+  display: none !important;
+}
+
+/* Mobile bottom ribbon menu */
+.mobile-menu-ribbon {
+  display: none !important;
+}
+
+/* Mobile time control modal */
+.mobile-time-modal {
+  display: none !important;
 }
 
 .mobile-timer {
@@ -978,15 +974,16 @@ nav .fa {
 }
 
 /* ========== MOBILE TIMERS (Top/Bottom Positioned) ========== */
+/* Hidden on desktop by default - shown only in mobile media query */
 .mobile-timer-top-card,
 .mobile-timer-bottom-card {
-  display: none;
   position: relative;
   z-index: 10;
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
   padding: 0 10px;
+  /* display is controlled by desktop rules above and mobile media query */
 }
 
 .mobile-timer-top-card {
@@ -1046,10 +1043,11 @@ nav .fa {
 }
 
 /* ========== MOBILE BOTTOM RIBBON MENU ========== */
+/* Hidden on desktop by default - shown only in mobile media query */
 .mobile-menu-ribbon {
-  display: none;
   position: fixed;
   bottom: 0;
+  /* display is controlled by desktop rules above and mobile media query */
   left: 0;
   right: 0;
   background: rgba(30, 41, 59, 0.95);
@@ -1199,22 +1197,21 @@ nav .fa {
 }
 
 /* Mobile Time Control Modal */
+/* Hidden on desktop by default - shown only in mobile media query */
 .mobile-time-modal {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  /* display is controlled by desktop rules above and mobile media query */
   background: rgba(0, 0, 0, 0.7);
   z-index: 2000;
   align-items: center;
   justify-content: center;
 }
 
-.mobile-time-modal.show {
-  display: flex;
-}
+/* .mobile-time-modal.show display is controlled by mobile media query */
 
 .mobile-time-modal-content {
   background: rgba(30, 41, 59, 0.95);
@@ -1261,13 +1258,18 @@ nav .fa {
 }
 
 @media (max-width: 768px) {
+  /* Override desktop hiding - show mobile features on mobile devices */
   .mobile-timer-top-card,
   .mobile-timer-bottom-card {
-    display: block;
+    display: block !important;
   }
 
   .mobile-menu-ribbon {
-    display: block;
+    display: block !important;
+  }
+  
+  .mobile-time-modal.show {
+    display: flex !important;
   }
 
   body {
