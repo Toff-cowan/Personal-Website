@@ -159,47 +159,11 @@
             caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Hackathon documentation photo</p>`;
         }
 
-        // Automatic scrolling with pause/resume
-        let autoScrollInterval = null;
-        let isAutoScrolling = true;
-        let scrollAmount = 0;
-        let scrollSpeed = 1;
-        let maxScroll = 0;
-        
-        function startAutoScroll() {
-            const scrollContainer = document.querySelector('.gallery-scroll-container');
-            if (scrollContainer) {
-                maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-                
-                function autoScroll() {
-                    if (isAutoScrolling) {
-                        scrollAmount += scrollSpeed;
-                        if (scrollAmount >= maxScroll) {
-                            scrollAmount = 0; // Reset to beginning
-                        }
-                        scrollContainer.scrollLeft = scrollAmount;
-                    }
-                    requestAnimationFrame(autoScroll);
-                }
-                
-                // Start auto scroll after a short delay
-                setTimeout(autoScroll, 2000);
-            }
-        }
-        
-        function pauseAutoScroll() {
-            isAutoScrolling = false;
-        }
-        
-        function resumeAutoScroll() {
-            isAutoScrolling = true;
-        }
-        
+        // Manual scrolling only - auto-scroll removed
         function resetGalleryScroll() {
             const scrollContainer = document.querySelector('.gallery-scroll-container');
             if (scrollContainer) {
                 scrollContainer.scrollLeft = 0;
-                scrollAmount = 0;
             }
         }
 
@@ -216,16 +180,13 @@
             }
         });
 
-        // Touch swiping for mobile
+        // Touch swiping for mobile (manual scrolling only)
         let touchStartX = 0;
         let touchStartY = 0;
-        let isScrolling = false;
         
         function handleTouchStart(e) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
-            isScrolling = false;
-            pauseAutoScroll();
         }
         
         function handleTouchMove(e) {
@@ -239,7 +200,6 @@
             
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 // Horizontal swipe
-                isScrolling = true;
                 const scrollContainer = document.querySelector('.gallery-scroll-container');
                 if (scrollContainer) {
                     scrollContainer.scrollLeft += diffX;
@@ -248,24 +208,12 @@
         }
         
         function handleTouchEnd(e) {
-            if (isScrolling) {
-                // Resume auto scroll after a delay
-                setTimeout(() => {
-                    resumeAutoScroll();
-                }, 3000);
-            } else {
-                resumeAutoScroll();
-            }
-            
             touchStartX = 0;
             touchStartY = 0;
-            isScrolling = false;
         }
         
-        // Add touch event listeners
+        // Add touch event listeners for manual scrolling
         document.addEventListener('DOMContentLoaded', function() {
-            startAutoScroll();
-            
             const scrollContainer = document.querySelector('.gallery-scroll-container');
             if (scrollContainer) {
                 scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: false });

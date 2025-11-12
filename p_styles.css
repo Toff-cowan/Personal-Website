@@ -940,7 +940,6 @@ nav .fa {
     }
     
     .mobile-social-links .social-link:hover {
-        color: var(--btn-bg);
         background-color: var(--btn-bg);
         color: white;
         transform: translateY(-2px);
