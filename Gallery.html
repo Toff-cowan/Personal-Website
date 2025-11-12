@@ -74,6 +74,12 @@
     <!-- Modal for Image Preview -->
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
+        <button class="modal-nav modal-nav-prev" onclick="changeImage(-1)" aria-label="Previous image">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav modal-nav-next" onclick="changeImage(1)" aria-label="Next image">
+            <i class="fas fa-chevron-right"></i>
+        </button>
         <img class="modal-content" id="modalImage">
         <div class="modal-caption" id="modalCaption"></div>
     </div>
@@ -122,22 +128,46 @@
             document.body.style.overflow = "auto";
         }
 
+        // Hackathon images array
+        const hackathonImages = [
+            'Pictures/IMG-20251020-WA0002.jpg',
+            'Pictures/IMG-20251020-WA0003.jpg',
+            'Pictures/IMG-20251020-WA0004.jpg',
+            'Pictures/IMG-20251020-WA0005.jpg',
+            'Pictures/IMG-20251020-WA0006.jpg',
+            'Pictures/IMG-20251020-WA0007.jpg',
+            'Pictures/IMG-20251020-WA0008.jpg',
+            'Pictures/IMG-20251020-WA0009.jpg',
+            'Pictures/IMG-20251020-WA0010.jpg'
+        ];
+        
+        let currentImageIndex = 0;
+        let isHackathonGallery = false;
+
         // Gallery modal functionality
         function openModal(element) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const caption = document.getElementById('modalCaption');
+            const navButtons = document.querySelectorAll('.modal-nav');
             const img = element.querySelector('img');
             const title = element.querySelector('.gallery-content h3').textContent;
             const description = element.querySelector('.gallery-content p').textContent;
             
+            isHackathonGallery = false;
             modal.style.display = "block";
             modalImg.src = img.src;
             caption.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+            
+            // Hide navigation arrows for single images
+            navButtons.forEach(btn => btn.style.display = 'none');
         }
 
         function closeModal() {
-            document.getElementById('imageModal').style.display = "none";
+            const modal = document.getElementById('imageModal');
+            modal.style.display = "none";
+            modal.style.zIndex = "9999"; // Reset to default
+            isHackathonGallery = false;
         }
 
         // Hackathon modal functionality
@@ -150,14 +180,68 @@
         }
 
         function openModalFromHackathon(img) {
+            // Close hackathon modal first
+            closeHackathonModal();
+            
+            // Find the index of the clicked image
+            const imgSrc = img.src.split('/').pop();
+            currentImageIndex = hackathonImages.findIndex(path => path.includes(imgSrc));
+            if (currentImageIndex === -1) {
+                // Try to find by full path
+                currentImageIndex = hackathonImages.findIndex(path => img.src.includes(path.split('/').pop()));
+            }
+            if (currentImageIndex === -1) currentImageIndex = 0;
+            
+            isHackathonGallery = true;
+            
+            // Then open image modal with higher z-index
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const caption = document.getElementById('modalCaption');
+            const navButtons = document.querySelectorAll('.modal-nav');
             
             modal.style.display = "block";
-            modalImg.src = img.src;
-            caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Hackathon documentation photo</p>`;
+            modal.style.zIndex = "10000"; // Higher than hackathon modal
+            modalImg.src = hackathonImages[currentImageIndex];
+            caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Photo ${currentImageIndex + 1} of ${hackathonImages.length}</p>`;
+            
+            // Show navigation arrows for hackathon gallery
+            navButtons.forEach(btn => btn.style.display = 'flex');
         }
+        
+        // Navigate between images
+        function changeImage(direction) {
+            if (!isHackathonGallery) return;
+            
+            currentImageIndex += direction;
+            
+            // Loop around
+            if (currentImageIndex < 0) {
+                currentImageIndex = hackathonImages.length - 1;
+            } else if (currentImageIndex >= hackathonImages.length) {
+                currentImageIndex = 0;
+            }
+            
+            const modalImg = document.getElementById('modalImage');
+            const caption = document.getElementById('modalCaption');
+            
+            modalImg.src = hackathonImages[currentImageIndex];
+            caption.innerHTML = `<h3>Intellibus AI Hackathon 2025</h3><p>Photo ${currentImageIndex + 1} of ${hackathonImages.length}</p>`;
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'block' && isHackathonGallery) {
+                if (e.key === 'ArrowLeft') {
+                    changeImage(-1);
+                } else if (e.key === 'ArrowRight') {
+                    changeImage(1);
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            }
+        });
 
         // Manual scrolling only - auto-scroll removed
         function resetGalleryScroll() {
@@ -180,7 +264,7 @@
             }
         });
 
-        // Touch swiping for mobile (manual scrolling only)
+        // Touch swiping for gallery container (manual scrolling only)
         let touchStartX = 0;
         let touchStartY = 0;
         
@@ -212,6 +296,48 @@
             touchStartY = 0;
         }
         
+        // Swipe functionality for image modal
+        let modalTouchStartX = 0;
+        let modalTouchStartY = 0;
+        let modalSwipeThreshold = 50; // Minimum distance for a swipe
+        
+        function handleModalTouchStart(e) {
+            if (!isHackathonGallery) return;
+            modalTouchStartX = e.touches[0].clientX;
+            modalTouchStartY = e.touches[0].clientY;
+        }
+        
+        function handleModalTouchMove(e) {
+            // Prevent default to avoid scrolling while swiping
+            if (isHackathonGallery && modalTouchStartX !== 0) {
+                e.preventDefault();
+            }
+        }
+        
+        function handleModalTouchEnd(e) {
+            if (!isHackathonGallery || modalTouchStartX === 0) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = modalTouchStartX - touchEndX;
+            const diffY = modalTouchStartY - touchEndY;
+            
+            // Check if it's a horizontal swipe
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > modalSwipeThreshold) {
+                if (diffX > 0) {
+                    // Swiped left - next image
+                    changeImage(1);
+                } else {
+                    // Swiped right - previous image
+                    changeImage(-1);
+                }
+            }
+            
+            modalTouchStartX = 0;
+            modalTouchStartY = 0;
+        }
+        
         // Add touch event listeners for manual scrolling
         document.addEventListener('DOMContentLoaded', function() {
             const scrollContainer = document.querySelector('.gallery-scroll-container');
@@ -219,6 +345,14 @@
                 scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
                 scrollContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
                 scrollContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
+            }
+            
+            // Add swipe listeners to modal image
+            const modalImage = document.getElementById('modalImage');
+            if (modalImage) {
+                modalImage.addEventListener('touchstart', handleModalTouchStart, { passive: true });
+                modalImage.addEventListener('touchmove', handleModalTouchMove, { passive: false });
+                modalImage.addEventListener('touchend', handleModalTouchEnd, { passive: true });
             }
         });
     </script>

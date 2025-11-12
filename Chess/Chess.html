@@ -16,15 +16,28 @@
 </head>
 <body>
   <!-- ======= NAV BAR ======= -->
- <nav>
-        <div class="nav-links" id="navLinks">
-            <ul>
-                <li><a href="../index.html">HOME</a></li>
-                <li><a href="../Projects.html">PROJECTS</a></li>
-                <li><a href="../Gallery.html">GALLERY</a></li>
-            </ul>
-        </div>
-    </nav>
+  <nav>
+    <div class="nav-links" id="navLinks">
+      <i class="fa fa-times" onclick="hideMenu()"></i>
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="../Projects.html">PROJECTS</a></li>
+        <li><a href="../Gallery.html">GALLERY</a></li>
+        <li><a href="../Services.html">SERVICES</a></li>
+      </ul>
+      <div class="mobile-social-links">
+        <a href="mailto:christoffcowan10@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
+        <a href="https://github.com/toff-cowan" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/christoff-cowan" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+    <i class="fa fa-bars" onclick="showMenu()"></i>
+  </nav>
+
+  <!-- ======= TITLE ======= -->
+  <div class="chess-title">
+    <h1>Chess (beta)</h1>
+  </div>
 
   <!-- ======= BOARD CONTAINER ======= -->
   <div class="board-container">
@@ -163,6 +176,7 @@
     <div class="time-control">
       <label for="timeSelect">Time Control</label>
       <select id="timeSelect">
+        <option value="0">No Time</option>
         <option value="60">1:00</option>
         <option value="180">3:00</option>
         <option value="300" selected>5:00</option>
@@ -202,6 +216,22 @@
 
   <!-- Optional alert -->
   <div id="alert" style="display:none"></div>
+
+  <!-- JavaScript for mobile menu -->
+  <script>
+    // Mobile menu toggle
+    const navLinks = document.getElementById("navLinks");
+    
+    function showMenu() {
+      navLinks.style.right = "0";
+      document.body.style.overflow = "hidden";
+    }
+    
+    function hideMenu() {
+      navLinks.style.right = "-300px";
+      document.body.style.overflow = "auto";
+    }
+  </script>
 
   <script src="Chess.js"></script>
 </body>

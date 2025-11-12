@@ -519,6 +519,10 @@ nav .fa {
 
 .service-card-mini .service-price {
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 .service-card-mini .price {
@@ -532,6 +536,29 @@ nav .fa {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
     margin-left: 0.5rem;
+}
+
+.service-card-mini .price-base {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    margin-bottom: 0.3rem;
+}
+
+.service-card-mini .price-message {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.service-card-mini .price-note {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    font-style: italic;
 }
 
 .service-btn {
@@ -582,6 +609,18 @@ nav .fa {
         font-size: 0.85rem;
         margin-left: 0;
         text-align: center;
+    }
+    
+    .service-card-mini .price-base {
+        font-size: 1.05rem;
+    }
+    
+    .service-card-mini .price-message {
+        font-size: 0.9rem;
+    }
+    
+    .service-card-mini .price-note {
+        font-size: 0.75rem;
     }
 }
 

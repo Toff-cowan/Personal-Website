@@ -78,11 +78,18 @@ function setupPieces() {
   const pieces = document.getElementsByClassName("piece");
   const piecesImages = document.getElementsByTagName("img");
   for (let i = 0; i < pieces.length; i++) {
+    // Enable drag functionality
+    pieces[i].setAttribute("draggable", true);
     pieces[i].addEventListener("dragstart", drag);
+    pieces[i].addEventListener("dragend", function(ev) {
+      clearMoveDots();
+      // Remove visual feedback
+      ev.target.closest('.piece')?.classList.remove('moving');
+    });
+    // Enable click functionality
     pieces[i].addEventListener("click", handlePieceClick);
     // Add touch support for pieces
     pieces[i].addEventListener("touchstart", handlePieceTouch, { passive: false });
-    pieces[i].setAttribute("draggable", true);
     if (!pieces[i].id) {
       const type = pieces[i].classList[1] || "piece";
       const parent = pieces[i].parentElement;
@@ -304,13 +311,17 @@ function allowDrop(ev) { ev.preventDefault(); }
 
 function drag(ev) {
   const piece = ev.target.closest('.piece');
-  if (!piece) return;
+  if (!piece) {
+    ev.preventDefault();
+    return;
+  }
   
   const pieceColor = piece.getAttribute("color");
   const pieceType = piece.classList[1];
   if ((isWhiteTurn && pieceColor == "white") || (!isWhiteTurn && pieceColor == "black")) {
     const startingSquareId = piece.parentNode.id;
     ev.dataTransfer.setData("text", piece.id + "|" + startingSquareId);
+    ev.dataTransfer.effectAllowed = "move";
     const pieceObject = { pieceColor, pieceType, pieceId: piece.id };
     let legalSquares = getPossibleMoves(startingSquareId, pieceObject, boardSquaresArray);
     legalSquares = isMoveValidAgainstCheck(legalSquares, startingSquareId, pieceColor, pieceType);
@@ -318,6 +329,9 @@ function drag(ev) {
     
     // Show move dots during drag
     showMoveDots(legalSquares, startingSquareId);
+    
+    // Add visual feedback
+    piece.classList.add('moving');
   } else {
     ev.preventDefault();
   }
