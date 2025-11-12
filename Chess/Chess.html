@@ -36,7 +36,7 @@
 
   <!-- ======= TITLE ======= -->
   <div class="chess-title">
-    <h1>Chess (beta)</h1>
+    <h1>THE CHESS (beta)</h1>
   </div>
 
   <!-- ======= CHESS CONTENT WRAPPER ======= -->
@@ -49,6 +49,11 @@
     </div>
     
     <div class="board-wrapper">
+      <!-- Black timer above captured black pieces -->
+      <div class="mobile-timer-top-card">
+        <div class="player-timer mobile-timer-display" id="black-timer-card">05:00</div>
+      </div>
+      
       <!-- Captured by White (on top) -->
       <div id="capturedTop" class="captured-row">
         <div class="captured-title"></div>
@@ -167,6 +172,11 @@
         <div class="captured-title"></div>
         <div id="capturedByWhite" class="captured-list"></div>
       </div>
+      
+      <!-- White timer below captured white pieces -->
+      <div class="mobile-timer-bottom-card">
+        <div class="player-timer mobile-timer-display" id="white-timer-card">05:00</div>
+      </div>
     </div>
     
     <div class="mobile-timer-right">
@@ -203,6 +213,11 @@
       <button id="resignBtn" class="btn danger">Resign</button>
     </div>
     
+    <!-- Draw button -->
+    <div class="menu-row">
+      <button id="drawBtn" class="btn">Offer Draw</button>
+    </div>
+    
     <!-- New game button -->
     <div class="menu-row">
       <button id="newGameBtn" class="btn danger">New Game</button>
@@ -227,11 +242,15 @@
     </div>
   </aside>
 
+
   <!-- ======= MOBILE BOTTOM RIBBON MENU ======= -->
   <div class="mobile-menu-ribbon">
     <div class="mobile-menu-main">
       <button id="resignBtnMobile" class="mobile-menu-btn" title="Resign">
         <i class="fas fa-flag"></i>
+      </button>
+      <button id="drawBtnMobile" class="mobile-menu-btn" title="Offer Draw">
+        <i class="fas fa-handshake"></i>
       </button>
       <button id="newGameBtnMobile" class="mobile-menu-btn" title="New Game">
         <i class="fas fa-plus"></i>
@@ -241,7 +260,15 @@
       </button>
     </div>
     <div class="mobile-menu-moves">
-      <div class="mobile-moves-header">Moves</div>
+      <div class="mobile-moves-nav">
+        <button id="prevMoveBtn" class="mobile-nav-btn" title="Previous Move">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="mobile-moves-header">Moves</div>
+        <button id="nextMoveBtn" class="mobile-nav-btn" title="Next Move">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
       <div class="mobile-moves-list" id="moveListMobile"></div>
     </div>
   </div>
@@ -271,15 +298,43 @@
     // Mobile menu toggle
     const navLinks = document.getElementById("navLinks");
     
+    // Function to show/hide dark mode button
+    function toggleDarkModeButton(show) {
+      const themeToggle = document.getElementById("theme-toggle");
+      if (themeToggle) {
+        if (show) {
+          themeToggle.classList.add("show-with-sidebar");
+        } else {
+          themeToggle.classList.remove("show-with-sidebar");
+        }
+      }
+    }
+    
     function showMenu() {
       navLinks.style.right = "0";
       document.body.style.overflow = "hidden";
+      
+      // Show dark mode button when sidebar opens
+      toggleDarkModeButton(true);
     }
     
     function hideMenu() {
       navLinks.style.right = "-300px";
       document.body.style.overflow = "auto";
+      
+      // Hide dark mode button when sidebar closes
+      toggleDarkModeButton(false);
     }
+    
+    // Ensure dark mode button is hidden initially (in case it loads after page load)
+    document.addEventListener('DOMContentLoaded', function() {
+      toggleDarkModeButton(false);
+    });
+    
+    // Also check after a delay in case dark-mode.js creates the button later
+    setTimeout(function() {
+      toggleDarkModeButton(false);
+    }, 500);
   </script>
 
   <script src="Chess.js"></script>

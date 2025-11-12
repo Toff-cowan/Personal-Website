@@ -62,15 +62,16 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 0;
+    overflow: visible;
   }
   
   .chessBoard {
-    width: 95vw !important;
-    height: 95vw !important;
+    width: 90vw !important;
+    height: 90vw !important;
     max-width: 500px;
     max-height: 500px;
-    min-width: 300px;
-    min-height: 300px;
+    min-width: 280px;
+    min-height: 280px;
   }
   
   .chessBoard .square {
@@ -99,12 +100,39 @@ body {
   }
   
   .menu-card {
-    order: 2;
-    width: 100%;
-    max-width: 95vw;
-    margin: 0 auto;
-    margin-top: 0;
-    padding: 12px;
+    display: none; /* Hide desktop menu on mobile */
+  }
+
+  /* Show mobile timers on sides */
+  .mobile-timer-left,
+  .mobile-timer-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .mobile-timer-left {
+    left: -70px;
+  }
+
+  .mobile-timer-right {
+    right: -70px;
+  }
+  
+  .mobile-timer {
+    min-width: 60px;
+    height: 120px;
+    font-size: 1rem;
+    padding: 15px 8px;
+  }
+
+  .board-container {
+    position: relative;
+    padding: 20px 80px; /* Extra padding for timers */
   }
   
   .menu-header h3 {
@@ -420,6 +448,44 @@ nav .fa {
   min-width: 0;
 }
 
+.board-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Mobile timers on sides */
+.mobile-timer-left,
+.mobile-timer-right {
+  display: none;
+}
+
+.mobile-timer {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  min-width: 50px;
+  padding: 10px 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: rgba(71, 85, 105, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.mobile-timer.active {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.2);
+}
+
 @media (max-width: 768px) {
   .board-container {
     margin-top: 10px;
@@ -730,7 +796,7 @@ nav .fa {
 
 @media (max-width: 768px) {
   .menu-card {
-    margin-top: 0;
+    display: none !important; /* Hide menu card on mobile */
   }
 }
 
@@ -888,6 +954,19 @@ nav .fa {
   border-color: #3b82f6;
 }
 
+/* Mobile timer colors */
+#white-timer-mobile {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(226, 232, 240, 0.9) 100%);
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+#black-timer-mobile {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+  color: #f8fafc;
+  border-color: #475569;
+}
+
 /* Move list header in menu */
 .move-list-header {
   font-size: 14px;
@@ -898,5 +977,329 @@ nav .fa {
   margin-top: 10px;
 }
 
+/* ========== MOBILE TIMERS (Top/Bottom Positioned) ========== */
+.mobile-timer-top-card,
+.mobile-timer-bottom-card {
+  display: none;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.mobile-timer-top-card {
+  order: 0; /* Above captured black pieces */
+}
+
+.mobile-timer-bottom-card {
+  order: 2; /* Below captured white pieces */
+}
+
+.mobile-timer-display {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid;
+  user-select: none;
+  transition: all 0.3s ease;
+  padding: 10px;
+}
+
+#white-timer-card {
+  background: transparent;
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#black-timer-card {
+  background: transparent;
+  color: #1e293b;
+  border-color: rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.mobile-timer-display.active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+  border-color: #3b82f6;
+}
+
+#black-timer-card.active {
+  color: #60a5fa;
+  border-color: #3b82f6;
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.6);
+}
+
+#white-timer-card.active {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* ========== MOBILE BOTTOM RIBBON MENU ========== */
+.mobile-menu-ribbon {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 998; /* Behind sidebar (z-index: 999) */
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-menu-main {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px;
+  gap: 20px;
+}
+
+.mobile-menu-btn {
+  flex: 1;
+  max-width: 80px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.3);
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-btn:hover,
+.mobile-menu-btn:active {
+  background: rgba(99, 102, 241, 0.5);
+  border-color: rgba(99, 102, 241, 0.7);
+  transform: scale(1.05);
+}
+
+.mobile-menu-btn.danger {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.mobile-menu-btn.danger:hover,
+.mobile-menu-btn.danger:active {
+  background: rgba(239, 68, 68, 0.5);
+  border-color: rgba(239, 68, 68, 0.7);
+}
+
+.mobile-menu-btn.draw-offered {
+  background: rgba(251, 191, 36, 0.4);
+  border-color: rgba(251, 191, 36, 0.6);
+  animation: pulse-draw 2s infinite;
+}
+
+.mobile-menu-btn.draw-offered:hover,
+.mobile-menu-btn.draw-offered:active {
+  background: rgba(251, 191, 36, 0.6);
+  border-color: rgba(251, 191, 36, 0.8);
+}
+
+@keyframes pulse-draw {
+  0%, 100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
+  }
+}
+
+.btn.draw-offered {
+  background: rgba(251, 191, 36, 0.4);
+  border-color: rgba(251, 191, 36, 0.6);
+  animation: pulse-draw 2s infinite;
+}
+
+.btn.draw-offered:hover {
+  background: rgba(251, 191, 36, 0.6);
+  border-color: rgba(251, 191, 36, 0.8);
+}
+
+.mobile-menu-moves {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-moves-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 10px;
+}
+
+.mobile-moves-header {
+  font-size: 11px;
+  font-weight: bold;
+  color: #94a3b8;
+  text-align: center;
+  flex: 1;
+}
+
+.mobile-nav-btn {
+  width: 30px;
+  height: 30px;
+  background: rgba(99, 102, 241, 0.3);
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-nav-btn:hover:not(:disabled),
+.mobile-nav-btn:active:not(:disabled) {
+  background: rgba(99, 102, 241, 0.5);
+  border-color: rgba(99, 102, 241, 0.7);
+  transform: scale(1.1);
+}
+
+.mobile-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mobile-moves-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.mobile-moves-list .move-list-item {
+  padding: 4px 8px;
+  font-size: 10px;
+  min-width: auto;
+}
+
+/* Mobile Time Control Modal */
+.mobile-time-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-time-modal.show {
+  display: flex;
+}
+
+.mobile-time-modal-content {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 300px;
+  width: 90%;
+  text-align: center;
+}
+
+.mobile-time-modal-content h3 {
+  margin: 0 0 20px 0;
+  color: #e2e8f0;
+  font-size: 20px;
+}
+
+.mobile-time-modal-content select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: rgba(71, 85, 105, 0.8);
+  color: #e2e8f0;
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  margin-bottom: 16px;
+}
+
+.mobile-time-close {
+  width: 100%;
+  padding: 12px;
+  background: rgba(99, 102, 241, 0.5);
+  border: 2px solid rgba(99, 102, 241, 0.7);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-time-close:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+@media (max-width: 768px) {
+  .mobile-timer-top-card,
+  .mobile-timer-bottom-card {
+    display: block;
+  }
+
+  .mobile-menu-ribbon {
+    display: block;
+  }
+
+  body {
+    padding-bottom: 180px; /* Space for bottom ribbon */
+  }
+  
+  /* Hide old side timers */
+  .mobile-timer-left,
+  .mobile-timer-right {
+    display: none !important;
+  }
+  
+  .board-container {
+    padding: 20px 15px; /* Normal padding */
+  }
+  
+  .board-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+
+/* ========== DARK MODE BUTTON (Chess Game Only) ========== */
+/* Hide dark mode button until sidebar is open */
+#theme-toggle {
+  display: none !important;
+}
+
+#theme-toggle.show-with-sidebar {
+  display: flex !important;
+}
 
 /*Navigation */

@@ -494,6 +494,20 @@ function makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, 
     restorePositionToView(currentViewIndex);
   }
   
+  // Clear draw offer when a move is made
+  if (drawOfferFrom !== null) {
+    drawOfferFrom = null;
+    drawAcceptedBy = null;
+    if (drawBtn) {
+      drawBtn.textContent = "Offer Draw";
+      drawBtn.classList.remove('draw-offered');
+    }
+    const drawBtnMobile = document.getElementById('drawBtnMobile');
+    if (drawBtnMobile) {
+      drawBtnMobile.classList.remove('draw-offered');
+    }
+  }
+  
   moves.push({
     from: startingSquareId,
     to: destinationSquareId,
@@ -1532,11 +1546,17 @@ function updateTimers() {
   if (whiteTimerEl) whiteTimerEl.textContent = whiteTimeStr;
   if (blackTimerEl) blackTimerEl.textContent = blackTimeStr;
   
-  // Update mobile timers
+  // Update mobile side timers
   const whiteTimerMobile = document.getElementById('white-timer-mobile');
   const blackTimerMobile = document.getElementById('black-timer-mobile');
   if (whiteTimerMobile) whiteTimerMobile.textContent = whiteTimeStr;
   if (blackTimerMobile) blackTimerMobile.textContent = blackTimeStr;
+  
+  // Update mobile timer card
+  const whiteTimerCard = document.getElementById('white-timer-card');
+  const blackTimerCard = document.getElementById('black-timer-card');
+  if (whiteTimerCard) whiteTimerCard.textContent = whiteTimeStr;
+  if (blackTimerCard) blackTimerCard.textContent = blackTimeStr;
   
   // Update timer colors based on active player
   if (activeColor === "white") {
@@ -1544,11 +1564,15 @@ function updateTimers() {
     if (blackTimerEl) blackTimerEl.classList.remove('active');
     if (whiteTimerMobile) whiteTimerMobile.classList.add('active');
     if (blackTimerMobile) blackTimerMobile.classList.remove('active');
+    if (whiteTimerCard) whiteTimerCard.classList.add('active');
+    if (blackTimerCard) blackTimerCard.classList.remove('active');
   } else {
     if (blackTimerEl) blackTimerEl.classList.add('active');
     if (whiteTimerEl) whiteTimerEl.classList.remove('active');
     if (blackTimerMobile) blackTimerMobile.classList.add('active');
     if (whiteTimerMobile) whiteTimerMobile.classList.remove('active');
+    if (blackTimerCard) blackTimerCard.classList.add('active');
+    if (whiteTimerCard) whiteTimerCard.classList.remove('active');
   }
 }
 
@@ -1622,6 +1646,7 @@ function setActiveColorFromTurn() {
 
 /* ---------- Resign button handler ---------- */
 const resignBtn = document.getElementById("resignBtn");
+const drawBtn = document.getElementById("drawBtn");
 
 resignBtn.addEventListener('click', () => {
   if (!confirm("Are you sure you want to resign?")) return;
@@ -1630,6 +1655,46 @@ resignBtn.addEventListener('click', () => {
   const winner = isWhiteTurn ? "Black" : "White";
   endGame(`${resigningColor} resigns! ${winner} wins!`);
   resetBoardPosition();
+});
+
+drawBtn.addEventListener('click', () => {
+  const currentPlayer = isWhiteTurn ? "white" : "black";
+  
+  // If no draw offer exists, create one
+  if (drawOfferFrom === null) {
+    drawOfferFrom = currentPlayer;
+    drawAcceptedBy = null;
+    drawBtn.textContent = "Cancel Draw Offer";
+    drawBtn.classList.add('draw-offered');
+    showAlert(`${currentPlayer === "white" ? "White" : "Black"} offers a draw. Waiting for opponent...`);
+    
+    // Update mobile button
+    const drawBtnMobile = document.getElementById('drawBtnMobile');
+    if (drawBtnMobile) {
+      drawBtnMobile.classList.add('draw-offered');
+    }
+  } 
+  // If current player already offered, cancel it
+  else if (drawOfferFrom === currentPlayer) {
+    drawOfferFrom = null;
+    drawAcceptedBy = null;
+    drawBtn.textContent = "Offer Draw";
+    drawBtn.classList.remove('draw-offered');
+    showAlert("Draw offer cancelled.");
+    
+    // Update mobile button
+    const drawBtnMobile = document.getElementById('drawBtnMobile');
+    if (drawBtnMobile) {
+      drawBtnMobile.classList.remove('draw-offered');
+    }
+  }
+  // If opponent offered, accept it
+  else if (drawOfferFrom !== currentPlayer) {
+    if (confirm("Accept the draw offer?")) {
+      endGame("Game drawn by agreement!");
+      resetBoardPosition();
+    }
+  }
 });
 
 /* ---------- Time control selector handler ---------- */
@@ -1687,6 +1752,18 @@ newGameBtn.addEventListener('click', () => {
   
   saveGameState();
   resignBtn.textContent = 'Resign';
+  
+  // Reset draw offer
+  drawOfferFrom = null;
+  drawAcceptedBy = null;
+  if (drawBtn) {
+    drawBtn.textContent = "Offer Draw";
+    drawBtn.classList.remove('draw-offered');
+  }
+  const drawBtnMobile = document.getElementById('drawBtnMobile');
+  if (drawBtnMobile) {
+    drawBtnMobile.classList.remove('draw-offered');
+  }
 });
 
 /* ---------- End game handler ---------- */
@@ -1919,6 +1996,12 @@ function setupMobileMenu() {
   if (resignBtnMobile && resignBtn) {
     resignBtnMobile.addEventListener('click', () => resignBtn.click());
     resignBtnMobile.classList.add('danger');
+  }
+
+  const drawBtnMobile = document.getElementById('drawBtnMobile');
+  const drawBtn = document.getElementById('drawBtn');
+  if (drawBtnMobile && drawBtn) {
+    drawBtnMobile.addEventListener('click', () => drawBtn.click());
   }
 
   if (newGameBtnMobile && newGameBtn) {
