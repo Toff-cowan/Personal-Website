@@ -8,6 +8,10 @@ const boardSquares = document.getElementsByClassName("square");
 let touchStartSquare = null;
 let touchStartTime = 0;
 let isDragging = false;
+let draggedPiece = null;
+let draggedPieceElement = null;
+let dragOffset = { x: 0, y: 0 };
+let currentTouchSquare = null;
 
 const boardElement = document.getElementById("board");
 const promotionBox = document.getElementById("promotion-box");
@@ -44,6 +48,10 @@ let halfmoveClock = 0;
 let positionHistory = [];
 let selectedPiece = null;
 let legalMoves = [];
+let currentViewIndex = -1; // -1 means viewing current position
+let isViewingHistory = false;
+let drawOfferFrom = null; // 'white', 'black', or null
+let drawAcceptedBy = null; // 'white', 'black', or null
 
 /* ---------- Utility: get image URL for a piece type/color ---------- */
 function getImageForPiece(pieceColor, pieceType) {
@@ -102,11 +110,206 @@ function setupPieces() {
 }
 
 /* ---------- Mobile touch support for pieces ---------- */
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = false;
+const TOUCH_MOVE_THRESHOLD = 10; // pixels
+
 function handlePieceTouch(event) {
-  event.preventDefault();
-  event.stopPropagation();
   const piece = event.currentTarget;
-  handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
+  const pieceColor = piece.getAttribute("color");
+  
+  // Only allow interaction if it's the player's turn
+  if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === "black")) {
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchMoved = false;
+    
+    const square = piece.parentElement;
+    const pieceRect = piece.getBoundingClientRect();
+    
+    // Calculate offset from touch point to piece center
+    dragOffset.x = touch.clientX - (pieceRect.left + pieceRect.width / 2);
+    dragOffset.y = touch.clientY - (pieceRect.top + pieceRect.height / 2);
+    
+    draggedPiece = {
+      pieceId: piece.id,
+      squareId: square.id,
+      pieceColor: pieceColor,
+      pieceType: piece.classList[1]
+    };
+    draggedPieceElement = piece;
+    
+    // Select the piece and show legal moves (for tap-to-move)
+    handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
+    
+    // Add global touch move and end listeners
+    document.addEventListener('touchmove', handlePieceTouchMove, { passive: false });
+    document.addEventListener('touchend', handlePieceTouchEnd, { passive: false });
+  }
+}
+
+function handlePieceTouchMove(event) {
+  if (draggedPiece && draggedPieceElement && event.touches.length > 0) {
+    const touch = event.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStartX);
+    const deltaY = Math.abs(touch.clientY - touchStartY);
+    
+    // Check if user has moved enough to start dragging
+    if (deltaX > TOUCH_MOVE_THRESHOLD || deltaY > TOUCH_MOVE_THRESHOLD) {
+      if (!touchMoved) {
+        // Start dragging
+        touchMoved = true;
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Make piece follow touch
+        draggedPieceElement.style.position = 'fixed';
+        draggedPieceElement.style.zIndex = '10000';
+        draggedPieceElement.style.pointerEvents = 'none';
+        draggedPieceElement.style.transform = 'scale(1.1)';
+        draggedPieceElement.style.transition = 'none';
+        
+        // Prevent page scrolling while dragging
+        document.body.style.overflow = 'hidden';
+      }
+      
+      // Update position
+      updateDraggedPiecePosition(touch.clientX, touch.clientY);
+      event.preventDefault();
+    } else {
+      // Not enough movement - allow page scrolling
+      return;
+    }
+  }
+}
+
+function handlePieceTouchEnd(event) {
+  if (draggedPiece && draggedPieceElement) {
+    // Re-enable page scrolling
+    document.body.style.overflow = '';
+    
+    if (touchMoved) {
+      // User was dragging - handle as drag end
+      handlePieceDragEnd(event);
+    } else {
+      // User just tapped - tap-to-move is already handled by handlePieceClick
+      // Just clean up
+      draggedPiece = null;
+      draggedPieceElement = null;
+      dragOffset = { x: 0, y: 0 };
+    }
+    
+    // Remove global listeners
+    document.removeEventListener('touchmove', handlePieceTouchMove);
+    document.removeEventListener('touchend', handlePieceTouchEnd);
+  }
+}
+
+function updateDraggedPiecePosition(x, y) {
+  if (draggedPieceElement) {
+    draggedPieceElement.style.left = (x - dragOffset.x) + 'px';
+    draggedPieceElement.style.top = (y - dragOffset.y) + 'px';
+    
+    // Clear all square highlights first
+    document.querySelectorAll('.square').forEach(sq => {
+      if (!sq.classList.contains('last-move')) {
+        sq.style.backgroundColor = '';
+      }
+    });
+    
+    // Find which square we're over
+    const elementBelow = document.elementFromPoint(x, y);
+    const squareBelow = elementBelow?.closest('.square');
+    if (squareBelow && squareBelow.id) {
+      const newSquareId = squareBelow.id;
+      currentTouchSquare = newSquareId;
+      
+      // Highlight if it's a legal move
+      if (legalMoves.includes(newSquareId)) {
+        squareBelow.style.backgroundColor = 'rgba(59, 130, 246, 0.5)';
+      } else if (newSquareId !== draggedPiece.squareId) {
+        // Highlight invalid moves in red
+        squareBelow.style.backgroundColor = 'rgba(239, 68, 68, 0.3)';
+      }
+    }
+  }
+}
+
+function handlePieceDragMove(event) {
+  if (draggedPiece && draggedPieceElement && event.touches.length > 0) {
+    event.preventDefault();
+    const touch = event.touches[0];
+    updateDraggedPiecePosition(touch.clientX, touch.clientY);
+  }
+}
+
+function handlePieceDragEnd(event) {
+  if (draggedPiece && draggedPieceElement) {
+    event.preventDefault();
+    
+    // Re-enable page scrolling
+    document.body.style.overflow = '';
+    
+    const originalSquare = document.getElementById(draggedPiece.squareId);
+    let moveExecuted = false;
+    
+    // Check if dropped on a legal square
+    if (currentTouchSquare && legalMoves.includes(currentTouchSquare)) {
+      const piece = document.getElementById(draggedPiece.pieceId);
+      if (piece) {
+        executeMove(draggedPiece.squareId, currentTouchSquare, piece);
+        moveExecuted = true;
+      }
+    }
+    
+    // Reset piece styling and position
+    if (!moveExecuted && originalSquare) {
+      // Return piece to original position with animation
+      draggedPieceElement.style.transition = 'all 0.3s ease';
+      const originalRect = originalSquare.getBoundingClientRect();
+      draggedPieceElement.style.left = originalRect.left + (originalRect.width / 2) - (draggedPieceElement.offsetWidth / 2) + 'px';
+      draggedPieceElement.style.top = originalRect.top + (originalRect.height / 2) - (draggedPieceElement.offsetHeight / 2) + 'px';
+      
+      // After animation, reset styles
+      setTimeout(() => {
+        draggedPieceElement.style.position = '';
+        draggedPieceElement.style.zIndex = '';
+        draggedPieceElement.style.pointerEvents = '';
+        draggedPieceElement.style.transform = '';
+        draggedPieceElement.style.transition = '';
+        draggedPieceElement.style.left = '';
+        draggedPieceElement.style.top = '';
+      }, 300);
+    } else {
+      // Immediately reset if move was executed
+      draggedPieceElement.style.position = '';
+      draggedPieceElement.style.zIndex = '';
+      draggedPieceElement.style.pointerEvents = '';
+      draggedPieceElement.style.transform = '';
+      draggedPieceElement.style.transition = '';
+      draggedPieceElement.style.left = '';
+      draggedPieceElement.style.top = '';
+    }
+    
+    // Clear square highlights
+    document.querySelectorAll('.square').forEach(sq => {
+      if (!sq.classList.contains('last-move')) {
+        sq.style.backgroundColor = '';
+      }
+    });
+    
+    clearSelection();
+    
+    // Remove global listeners (already removed in handlePieceTouchEnd)
+    
+    // Reset drag state
+    draggedPiece = null;
+    draggedPieceElement = null;
+    currentTouchSquare = null;
+    dragOffset = { x: 0, y: 0 };
+  }
 }
 
 /* ---------- Board array filling ---------- */
@@ -167,6 +370,12 @@ function clearMoveDots() {
 /* ---------- CLICK HANDLERS ---------- */
 function handlePieceClick(event) {
   event.stopPropagation();
+  
+  // Don't allow moves when viewing history
+  if (isViewingHistory) {
+    return;
+  }
+  
   const piece = event.currentTarget;
   const pieceColor = piece.getAttribute("color");
   
@@ -278,6 +487,13 @@ function executeMove(fromId, toId, piece) {
 
 /* ---------- Move recording ---------- */
 function makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, captured, extra = {}) {
+  // If viewing history, return to current position first
+  if (isViewingHistory && currentViewIndex < moves.length - 1) {
+    // Restore to latest position
+    currentViewIndex = moves.length - 1;
+    restorePositionToView(currentViewIndex);
+  }
+  
   moves.push({
     from: startingSquareId,
     to: destinationSquareId,
@@ -286,10 +502,15 @@ function makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, 
     captured,
     ...extra
   });
+  
+  currentViewIndex = moves.length - 1; // Update to latest move
+  isViewingHistory = false;
+  
   if (pieceType === "pawn" || captured) halfmoveClock = 0;
   else halfmoveClock++;
   updatePreviousMoveUI(moves[moves.length - 1]);
   updateMoveList();
+  updateNavigationButtons();
   saveGameState();
 }
 
@@ -322,6 +543,31 @@ function drag(ev) {
     const startingSquareId = piece.parentNode.id;
     ev.dataTransfer.setData("text", piece.id + "|" + startingSquareId);
     ev.dataTransfer.effectAllowed = "move";
+    
+    // Create a drag image that matches the piece size
+    const pieceRect = piece.getBoundingClientRect();
+    const dragImage = piece.cloneNode(true);
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-1000px';
+    dragImage.style.left = '-1000px';
+    dragImage.style.width = pieceRect.width + 'px';
+    dragImage.style.height = pieceRect.height + 'px';
+    dragImage.style.opacity = '0.8';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.transform = 'scale(1.1)';
+    document.body.appendChild(dragImage);
+    
+    // Calculate offset to center the drag image on cursor
+    const offsetX = pieceRect.width / 2;
+    const offsetY = pieceRect.height / 2;
+    ev.dataTransfer.setDragImage(dragImage, offsetX, offsetY);
+    
+    setTimeout(() => {
+      if (document.body.contains(dragImage)) {
+        document.body.removeChild(dragImage);
+      }
+    }, 0);
+    
     const pieceObject = { pieceColor, pieceType, pieceId: piece.id };
     let legalSquares = getPossibleMoves(startingSquareId, pieceObject, boardSquaresArray);
     legalSquares = isMoveValidAgainstCheck(legalSquares, startingSquareId, pieceColor, pieceType);
@@ -1196,6 +1442,12 @@ function promotePawn(squareId, pieceColor, pieceType, piece) {
   newPiece.id = pieceType + squareId;
   newPiece.setAttribute("draggable", true);
   newPiece.addEventListener("dragstart", drag);
+  newPiece.addEventListener("dragend", function(ev) {
+    clearMoveDots();
+    ev.target.closest('.piece')?.classList.remove('moving');
+  });
+  newPiece.addEventListener("click", handlePieceClick);
+  newPiece.addEventListener("touchstart", handlePieceTouch, { passive: false });
   const img = document.createElement("img");
   img.src = getImageForPiece(pieceColor, pieceType);
   img.alt = pieceType;
@@ -1274,16 +1526,29 @@ function formatTime(seconds) {
 }
 
 function updateTimers() {
-  whiteTimerEl.textContent = formatTime(whiteTime);
-  blackTimerEl.textContent = formatTime(blackTime);
+  const whiteTimeStr = formatTime(whiteTime);
+  const blackTimeStr = formatTime(blackTime);
+  
+  if (whiteTimerEl) whiteTimerEl.textContent = whiteTimeStr;
+  if (blackTimerEl) blackTimerEl.textContent = blackTimeStr;
+  
+  // Update mobile timers
+  const whiteTimerMobile = document.getElementById('white-timer-mobile');
+  const blackTimerMobile = document.getElementById('black-timer-mobile');
+  if (whiteTimerMobile) whiteTimerMobile.textContent = whiteTimeStr;
+  if (blackTimerMobile) blackTimerMobile.textContent = blackTimeStr;
   
   // Update timer colors based on active player
   if (activeColor === "white") {
-    whiteTimerEl.classList.add('active');
-    blackTimerEl.classList.remove('active');
+    if (whiteTimerEl) whiteTimerEl.classList.add('active');
+    if (blackTimerEl) blackTimerEl.classList.remove('active');
+    if (whiteTimerMobile) whiteTimerMobile.classList.add('active');
+    if (blackTimerMobile) blackTimerMobile.classList.remove('active');
   } else {
-    blackTimerEl.classList.add('active');
-    whiteTimerEl.classList.remove('active');
+    if (blackTimerEl) blackTimerEl.classList.add('active');
+    if (whiteTimerEl) whiteTimerEl.classList.remove('active');
+    if (blackTimerMobile) blackTimerMobile.classList.add('active');
+    if (whiteTimerMobile) whiteTimerMobile.classList.remove('active');
   }
 }
 
@@ -1633,54 +1898,340 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   console.log("Chess board initialized successfully!");
+
+  // Mobile menu setup
+  setupMobileMenu();
 });
 
-/* ---------- MOBILE TOUCH HANDLERS ---------- */
-function handleTouchStart(event) {
-  event.preventDefault();
-  event.stopPropagation();
-  const square = event.currentTarget;
-  const squareId = square.id;
+/* ---------- MOBILE MENU SETUP ---------- */
+function setupMobileMenu() {
+  // Sync mobile buttons with desktop buttons
+  const resignBtnMobile = document.getElementById('resignBtnMobile');
+  const newGameBtnMobile = document.getElementById('newGameBtnMobile');
+  const timeControlBtnMobile = document.getElementById('timeControlBtnMobile');
+  const resignBtn = document.getElementById('resignBtn');
+  const newGameBtn = document.getElementById('newGameBtn');
+  const timeSelect = document.getElementById('timeSelect');
+  const timeSelectMobile = document.getElementById('timeSelectMobile');
+  const mobileTimeModal = document.getElementById('mobileTimeModal');
+  const mobileTimeClose = document.querySelector('.mobile-time-close');
+
+  if (resignBtnMobile && resignBtn) {
+    resignBtnMobile.addEventListener('click', () => resignBtn.click());
+    resignBtnMobile.classList.add('danger');
+  }
+
+  if (newGameBtnMobile && newGameBtn) {
+    newGameBtnMobile.addEventListener('click', () => newGameBtn.click());
+    newGameBtnMobile.classList.add('danger');
+  }
+
+  if (timeControlBtnMobile) {
+    timeControlBtnMobile.addEventListener('click', () => {
+      mobileTimeModal.classList.add('show');
+    });
+  }
+
+  if (mobileTimeClose) {
+    mobileTimeClose.addEventListener('click', () => {
+      mobileTimeModal.classList.remove('show');
+    });
+  }
+
+  if (mobileTimeModal) {
+    mobileTimeModal.addEventListener('click', (e) => {
+      if (e.target === mobileTimeModal) {
+        mobileTimeModal.classList.remove('show');
+      }
+    });
+  }
+
+  // Sync time select
+  if (timeSelectMobile && timeSelect) {
+    timeSelectMobile.value = timeSelect.value;
+    timeSelectMobile.addEventListener('change', (e) => {
+      timeSelect.value = e.target.value;
+      timeSelect.dispatchEvent(new Event('change'));
+      mobileTimeModal.classList.remove('show');
+    });
+    timeSelect.addEventListener('change', (e) => {
+      timeSelectMobile.value = e.target.value;
+    });
+  }
+
+  // Sync move list
+  syncMobileMoveList();
   
-  touchStartSquare = squareId;
-  touchStartTime = Date.now();
-  isDragging = false;
+  // Setup move navigation
+  setupMoveNavigation();
+}
+
+function setupMoveNavigation() {
+  const prevMoveBtn = document.getElementById('prevMoveBtn');
+  const nextMoveBtn = document.getElementById('nextMoveBtn');
   
-  // If there's a piece on this square and it's the player's turn, select it
-  const piece = square.querySelector('.piece');
-  if (piece) {
-    const pieceColor = piece.getAttribute("color");
-    // Only select if it's the correct player's turn
-    if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === "black")) {
-      handlePieceClick({ currentTarget: piece, stopPropagation: () => {} });
+  if (prevMoveBtn) {
+    prevMoveBtn.addEventListener('click', navigateToPreviousMove);
+  }
+  
+  if (nextMoveBtn) {
+    nextMoveBtn.addEventListener('click', navigateToNextMove);
+  }
+  
+  updateNavigationButtons();
+}
+
+function navigateToPreviousMove() {
+  if (currentViewIndex > -1) {
+    currentViewIndex--;
+    restorePositionToView(currentViewIndex);
+    updateNavigationButtons();
+  }
+}
+
+function navigateToNextMove() {
+  if (currentViewIndex < moves.length - 1) {
+    currentViewIndex++;
+    restorePositionToView(currentViewIndex);
+    updateNavigationButtons();
+  }
+}
+
+function restorePositionToView(moveIndex) {
+  // Save current viewing state
+  isViewingHistory = moveIndex !== moves.length - 1;
+  
+  // Clear the board
+  clearBoard();
+  
+  // Restore initial position
+  restoreInitialPosition();
+  
+  // Apply moves up to the selected index
+  for (let i = 0; i <= moveIndex; i++) {
+    const move = moves[i];
+    const fromSquare = document.getElementById(move.from);
+    const toSquare = document.getElementById(move.to);
+    const piece = fromSquare ? fromSquare.querySelector('.piece') : null;
+    
+    if (piece && toSquare) {
+      // Move piece visually
+      toSquare.appendChild(piece);
+      
+      // Update board array for display
+      const fromIndex = boardSquaresArray.findIndex(sq => sq.squareId === move.from);
+      const toIndex = boardSquaresArray.findIndex(sq => sq.squareId === move.to);
+      
+      if (fromIndex !== -1 && toIndex !== -1) {
+        const targetPiece = boardSquaresArray[toIndex];
+        
+        // Handle captures
+        if (targetPiece.pieceColor !== "blank" && targetPiece.pieceColor !== move.pieceColor) {
+          // Remove captured piece visually
+          const capturedPiece = toSquare.querySelector('.piece');
+          if (capturedPiece && capturedPiece !== piece) {
+            capturedPiece.remove();
+          }
+        }
+        
+        // Update board array
+        boardSquaresArray[toIndex].pieceColor = move.pieceColor;
+        boardSquaresArray[toIndex].pieceType = move.pieceType;
+        boardSquaresArray[toIndex].pieceId = piece.id;
+        boardSquaresArray[fromIndex].pieceColor = "blank";
+        boardSquaresArray[fromIndex].pieceType = "blank";
+        boardSquaresArray[fromIndex].pieceId = "blank";
+      }
     }
   }
+  
+  // Update turn indicator based on move index
+  if (moveIndex >= 0) {
+    const lastMove = moves[moveIndex];
+    isWhiteTurn = lastMove.pieceColor === "black"; // Next turn is opposite
+  } else {
+    isWhiteTurn = true;
+  }
+  
+  // Clear selection and highlights
+  clearSelection();
+  clearMoveDots();
+}
+
+function clearBoard() {
+  // Remove all pieces from board
+  boardSquaresArray.forEach(sq => {
+    const squareEl = document.getElementById(sq.squareId);
+    if (squareEl) {
+      const piece = squareEl.querySelector('.piece');
+      if (piece) {
+        piece.remove();
+      }
+    }
+  });
+}
+
+function restoreInitialPosition() {
+  // Reset board array to initial position
+  boardSquaresArray = [];
+  for (let i = 0; i < boardSquares.length; i++) {
+    let row = 8 - Math.floor(i / 8);
+    let column = String.fromCharCode(97 + (i % 8));
+    let square = boardSquares[i];
+    square.id = column + row;
+    
+    // Initial position setup
+    const initialPieces = {
+      'a8': { piece: 'rook', color: 'black' },
+      'b8': { piece: 'knight', color: 'black' },
+      'c8': { piece: 'bishop', color: 'black' },
+      'd8': { piece: 'queen', color: 'black' },
+      'e8': { piece: 'king', color: 'black' },
+      'f8': { piece: 'bishop', color: 'black' },
+      'g8': { piece: 'knight', color: 'black' },
+      'h8': { piece: 'rook', color: 'black' },
+      'a7': { piece: 'pawn', color: 'black' },
+      'b7': { piece: 'pawn', color: 'black' },
+      'c7': { piece: 'pawn', color: 'black' },
+      'd7': { piece: 'pawn', color: 'black' },
+      'e7': { piece: 'pawn', color: 'black' },
+      'f7': { piece: 'pawn', color: 'black' },
+      'g7': { piece: 'pawn', color: 'black' },
+      'h7': { piece: 'pawn', color: 'black' },
+      'a2': { piece: 'pawn', color: 'white' },
+      'b2': { piece: 'pawn', color: 'white' },
+      'c2': { piece: 'pawn', color: 'white' },
+      'd2': { piece: 'pawn', color: 'white' },
+      'e2': { piece: 'pawn', color: 'white' },
+      'f2': { piece: 'pawn', color: 'white' },
+      'g2': { piece: 'pawn', color: 'white' },
+      'h2': { piece: 'pawn', color: 'white' },
+      'a1': { piece: 'rook', color: 'white' },
+      'b1': { piece: 'knight', color: 'white' },
+      'c1': { piece: 'bishop', color: 'white' },
+      'd1': { piece: 'queen', color: 'white' },
+      'e1': { piece: 'king', color: 'white' },
+      'f1': { piece: 'bishop', color: 'white' },
+      'g1': { piece: 'knight', color: 'white' },
+      'h1': { piece: 'rook', color: 'white' }
+    };
+    
+    const squareId = square.id;
+    if (initialPieces[squareId]) {
+      const pieceInfo = initialPieces[squareId];
+      const piece = document.createElement("div");
+      piece.className = `piece ${pieceInfo.piece}`;
+      piece.setAttribute("color", pieceInfo.color);
+      piece.id = pieceInfo.piece + squareId;
+      piece.setAttribute("draggable", true);
+      piece.addEventListener("dragstart", drag);
+      piece.addEventListener("dragend", function(ev) {
+        clearMoveDots();
+        ev.target.closest('.piece')?.classList.remove('moving');
+      });
+      piece.addEventListener("click", handlePieceClick);
+      piece.addEventListener("touchstart", handlePieceTouch, { passive: false });
+      
+      const img = document.createElement("img");
+      img.src = getImageForPiece(pieceInfo.color, pieceInfo.piece);
+      img.alt = pieceInfo.piece;
+      img.setAttribute("draggable", false);
+      piece.appendChild(img);
+      square.appendChild(piece);
+      
+      boardSquaresArray.push({
+        squareId: squareId,
+        pieceColor: pieceInfo.color,
+        pieceType: pieceInfo.piece,
+        pieceId: piece.id
+      });
+    } else {
+      boardSquaresArray.push({
+        squareId: squareId,
+        pieceColor: "blank",
+        pieceType: "blank",
+        pieceId: "blank"
+      });
+    }
+  }
+}
+
+function updateNavigationButtons() {
+  const prevMoveBtn = document.getElementById('prevMoveBtn');
+  const nextMoveBtn = document.getElementById('nextMoveBtn');
+  
+  if (prevMoveBtn) {
+    prevMoveBtn.disabled = currentViewIndex <= -1 || moves.length === 0;
+  }
+  
+  if (nextMoveBtn) {
+    nextMoveBtn.disabled = currentViewIndex >= moves.length - 1;
+  }
+}
+
+function syncMobileMoveList() {
+  const moveList = document.getElementById('moveList');
+  const moveListMobile = document.getElementById('moveListMobile');
+  
+  if (!moveList || !moveListMobile) return;
+
+  // Observer to sync moves
+  const observer = new MutationObserver(() => {
+    moveListMobile.innerHTML = moveList.innerHTML;
+    // Update styles for mobile
+    moveListMobile.querySelectorAll('.move-list-item').forEach(item => {
+      item.style.fontSize = '10px';
+      item.style.padding = '4px 8px';
+    });
+  });
+
+  observer.observe(moveList, { childList: true, subtree: true });
+  
+  // Initial sync
+  moveListMobile.innerHTML = moveList.innerHTML;
+}
+
+
+/* ---------- MOBILE TOUCH HANDLERS FOR SQUARES (tap to move) ---------- */
+function handleTouchStart(event) {
+  // Don't prevent default - allow scrolling if not on a piece
+  const square = event.currentTarget;
+  const piece = square.querySelector('.piece');
+  
+  // Only prevent default if there's a piece and we might interact with it
+  if (piece) {
+    const pieceColor = piece.getAttribute("color");
+    if ((isWhiteTurn && pieceColor === "white") || (!isWhiteTurn && pieceColor === "black")) {
+      // This will be handled by handlePieceTouch
+      return;
+    }
+  }
+  
+  touchStartSquare = square.id;
+  touchStartTime = Date.now();
+  isDragging = false;
 }
 
 function handleTouchMove(event) {
-  // Mark as dragging if moved significantly
-  if (touchStartSquare && event.touches.length > 0) {
-    const touch = event.touches[0];
-    const square = event.currentTarget;
-    const rect = square.getBoundingClientRect();
-    // Check if touch moved outside the square significantly
-    const threshold = 10; // pixels
-    if (touch.clientX < rect.left - threshold || touch.clientX > rect.right + threshold || 
-        touch.clientY < rect.top - threshold || touch.clientY > rect.bottom + threshold) {
-      isDragging = true;
-    }
+  // Allow scrolling - don't prevent default unless we're actually dragging a piece
+  if (!draggedPiece) {
+    return; // Allow normal scrolling
   }
+  // If dragging a piece, preventDefault is handled in handlePieceDragMove
 }
 
 function handleTouchEnd(event) {
-  event.preventDefault();
-  event.stopPropagation();
+  // Only handle if we're not in the middle of a piece drag
+  if (draggedPiece) {
+    return; // Let handlePieceDragEnd handle it
+  }
+  
   const square = event.currentTarget;
   const squareId = square.id;
   const touchDuration = Date.now() - touchStartTime;
   
-  // If it was a quick tap (not a drag)
-  if (touchDuration < 500 && !isDragging) {
+  // Only handle quick taps (not scrolls)
+  if (touchDuration < 300 && !isDragging && touchStartSquare === squareId) {
     // If we have a selected piece and this square is a legal move, execute it
     if (selectedPiece && legalMoves.includes(squareId)) {
       const piece = document.getElementById(selectedPiece.pieceId);

@@ -39,16 +39,24 @@
     <h1>Chess (beta)</h1>
   </div>
 
-  <!-- ======= BOARD CONTAINER ======= -->
-  <div class="board-container">
-    <!-- Captured by White (on top) -->
-    <div id="capturedTop" class="captured-row">
-      <div class="captured-title"></div>
-      <div id="capturedByBlack" class="captured-list"></div>
+  <!-- ======= CHESS CONTENT WRAPPER ======= -->
+  <div class="chess-content-wrapper">
+    <!-- ======= BOARD CONTAINER ======= -->
+    <div class="board-container">
+    <!-- Mobile Timers on sides -->
+    <div class="mobile-timer-left">
+      <div class="player-timer mobile-timer" id="white-timer-mobile">05:00</div>
     </div>
+    
+    <div class="board-wrapper">
+      <!-- Captured by White (on top) -->
+      <div id="capturedTop" class="captured-row">
+        <div class="captured-title"></div>
+        <div id="capturedByBlack" class="captured-list"></div>
+      </div>
 
-    <!-- Chess Board -->
-    <div id="board" class="chessBoard">
+      <!-- Chess Board -->
+      <div id="board" class="chessBoard">
       <!-- 8th Rank -->
       <div class="square white">
         <div class="piece rook" color="black"> 
@@ -154,10 +162,15 @@
       </div>
     </div>
 
-    <!-- Captured by Black (on bottom) -->
-    <div id="capturedBottom" class="captured-row">
-      <div class="captured-title"></div>
-      <div id="capturedByWhite" class="captured-list"></div>
+      <!-- Captured by Black (on bottom) -->
+      <div id="capturedBottom" class="captured-row">
+        <div class="captured-title"></div>
+        <div id="capturedByWhite" class="captured-list"></div>
+      </div>
+    </div>
+    
+    <div class="mobile-timer-right">
+      <div class="player-timer mobile-timer" id="black-timer-mobile">05:00</div>
     </div>
   </div>
 
@@ -166,7 +179,7 @@
     <div id="promotion-options" class="flex flex-col gap-2"></div>
   </div>
 
-  <!-- ======= RIGHT MENU CARD ======= -->
+  <!-- ======= RIGHT MENU CARD (Desktop) ======= -->
   <aside id="menu-card" class="menu-card">
     <div class="menu-header">
       <h3>Game Menu</h3>
@@ -213,6 +226,42 @@
       <div id="moveList" class="move-list"></div>
     </div>
   </aside>
+
+  <!-- ======= MOBILE BOTTOM RIBBON MENU ======= -->
+  <div class="mobile-menu-ribbon">
+    <div class="mobile-menu-main">
+      <button id="resignBtnMobile" class="mobile-menu-btn" title="Resign">
+        <i class="fas fa-flag"></i>
+      </button>
+      <button id="newGameBtnMobile" class="mobile-menu-btn" title="New Game">
+        <i class="fas fa-plus"></i>
+      </button>
+      <button id="timeControlBtnMobile" class="mobile-menu-btn" title="Time Control">
+        <i class="fas fa-clock"></i>
+      </button>
+    </div>
+    <div class="mobile-menu-moves">
+      <div class="mobile-moves-header">Moves</div>
+      <div class="mobile-moves-list" id="moveListMobile"></div>
+    </div>
+  </div>
+
+  <!-- Mobile Time Control Modal -->
+  <div id="mobileTimeModal" class="mobile-time-modal">
+    <div class="mobile-time-modal-content">
+      <h3>Time Control</h3>
+      <select id="timeSelectMobile">
+        <option value="0">No Time</option>
+        <option value="60">1:00</option>
+        <option value="180">3:00</option>
+        <option value="300" selected>5:00</option>
+        <option value="600">10:00</option>
+        <option value="1800">30:00</option>
+      </select>
+      <button class="mobile-time-close">Close</button>
+    </div>
+  </div>
+  </div>
 
   <!-- Optional alert -->
   <div id="alert" style="display:none"></div>
