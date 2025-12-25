@@ -1,0 +1,18 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Handle chess route
+RewriteRule ^chess/?$ Chess/Chess.html [NC,L]
+
+# Remove .html extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# Redirect .html to clean URL (removes .html from visible URL)
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1? [NC,L,R=301]
+
+# Set index.html as default directory index
+DirectoryIndex index.html
+
