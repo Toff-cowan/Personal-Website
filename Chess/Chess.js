@@ -196,9 +196,11 @@ function handlePieceTouchEnd(event) {
     } else {
       // User just tapped - tap-to-move is already handled by handlePieceClick
       // Just clean up
+      touchMoved = false;
       draggedPiece = null;
       draggedPieceElement = null;
       dragOffset = { x: 0, y: 0 };
+      currentTouchSquare = null;
     }
     
     // Remove global listeners
@@ -264,33 +266,52 @@ function handlePieceDragEnd(event) {
       }
     }
     
-    // Reset piece styling and position
-    if (!moveExecuted && originalSquare) {
-      // Return piece to original position with animation
-      draggedPieceElement.style.transition = 'all 0.3s ease';
-      const originalRect = originalSquare.getBoundingClientRect();
-      draggedPieceElement.style.left = originalRect.left + (originalRect.width / 2) - (draggedPieceElement.offsetWidth / 2) + 'px';
-      draggedPieceElement.style.top = originalRect.top + (originalRect.height / 2) - (draggedPieceElement.offsetHeight / 2) + 'px';
+    // Always reset piece styling and position
+    if (originalSquare && draggedPieceElement) {
+      // Store the piece element reference
+      const pieceToReset = draggedPieceElement;
       
-      // After animation, reset styles
-      setTimeout(() => {
-        draggedPieceElement.style.position = '';
-        draggedPieceElement.style.zIndex = '';
-        draggedPieceElement.style.pointerEvents = '';
-        draggedPieceElement.style.transform = '';
-        draggedPieceElement.style.transition = '';
-        draggedPieceElement.style.left = '';
-        draggedPieceElement.style.top = '';
-      }, 300);
-    } else {
-      // Immediately reset if move was executed
-      draggedPieceElement.style.position = '';
-      draggedPieceElement.style.zIndex = '';
-      draggedPieceElement.style.pointerEvents = '';
-      draggedPieceElement.style.transform = '';
-      draggedPieceElement.style.transition = '';
-      draggedPieceElement.style.left = '';
-      draggedPieceElement.style.top = '';
+      // If move was not executed, return piece to original position
+      if (!moveExecuted) {
+        // Return piece to original position with animation
+        pieceToReset.style.transition = 'all 0.3s ease';
+        const originalRect = originalSquare.getBoundingClientRect();
+        const boardRect = boardElement.getBoundingClientRect();
+        
+        // Calculate position relative to the board
+        const relativeLeft = originalRect.left - boardRect.left + (originalRect.width / 2) - (pieceToReset.offsetWidth / 2);
+        const relativeTop = originalRect.top - boardRect.top + (originalRect.height / 2) - (pieceToReset.offsetHeight / 2);
+        
+        pieceToReset.style.left = originalRect.left + (originalRect.width / 2) - (pieceToReset.offsetWidth / 2) + 'px';
+        pieceToReset.style.top = originalRect.top + (originalRect.height / 2) - (pieceToReset.offsetHeight / 2) + 'px';
+        
+        // After animation, reset all styles and ensure piece is back in its square
+        setTimeout(() => {
+          // Reset all inline styles
+          pieceToReset.style.position = '';
+          pieceToReset.style.zIndex = '';
+          pieceToReset.style.pointerEvents = '';
+          pieceToReset.style.transform = '';
+          pieceToReset.style.transition = '';
+          pieceToReset.style.left = '';
+          pieceToReset.style.top = '';
+          
+          // Ensure the piece is still in the correct square (in case DOM was modified)
+          if (originalSquare && !originalSquare.contains(pieceToReset)) {
+            // Piece might have been moved, but we need to ensure it's visually correct
+            // The piece should already be in the square from the original setup
+          }
+        }, 300);
+      } else {
+        // Move was executed - immediately reset styles
+        pieceToReset.style.position = '';
+        pieceToReset.style.zIndex = '';
+        pieceToReset.style.pointerEvents = '';
+        pieceToReset.style.transform = '';
+        pieceToReset.style.transition = '';
+        pieceToReset.style.left = '';
+        pieceToReset.style.top = '';
+      }
     }
     
     // Clear square highlights
@@ -302,9 +323,8 @@ function handlePieceDragEnd(event) {
     
     clearSelection();
     
-    // Remove global listeners (already removed in handlePieceTouchEnd)
-    
     // Reset drag state
+    touchMoved = false;
     draggedPiece = null;
     draggedPieceElement = null;
     currentTouchSquare = null;
@@ -505,6 +525,11 @@ function makeMove(startingSquareId, destinationSquareId, pieceType, pieceColor, 
     const drawBtnMobile = document.getElementById('drawBtnMobile');
     if (drawBtnMobile) {
       drawBtnMobile.classList.remove('draw-offered');
+    }
+    // Hide mobile draw confirmation
+    const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+    if (mobileDrawConfirm) {
+      mobileDrawConfirm.classList.remove('show');
     }
   }
   
@@ -1673,6 +1698,12 @@ drawBtn.addEventListener('click', () => {
     if (drawBtnMobile) {
       drawBtnMobile.classList.add('draw-offered');
     }
+    
+    // Hide mobile confirmation if it was showing
+    const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+    if (mobileDrawConfirm) {
+      mobileDrawConfirm.classList.remove('show');
+    }
   } 
   // If current player already offered, cancel it
   else if (drawOfferFrom === currentPlayer) {
@@ -1687,12 +1718,32 @@ drawBtn.addEventListener('click', () => {
     if (drawBtnMobile) {
       drawBtnMobile.classList.remove('draw-offered');
     }
+    
+    // Hide mobile confirmation
+    const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+    if (mobileDrawConfirm) {
+      mobileDrawConfirm.classList.remove('show');
+    }
   }
-  // If opponent offered, accept it
+  // If opponent offered, accept it (desktop uses confirm, mobile uses custom UI)
   else if (drawOfferFrom !== currentPlayer) {
-    if (confirm("Accept the draw offer?")) {
-      endGame("Game drawn by agreement!");
-      resetBoardPosition();
+    // Check if we're on mobile (screen width < 768px)
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      // Show mobile confirmation UI
+      const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+      const mobileDrawMessage = document.getElementById('mobileDrawMessage');
+      if (mobileDrawConfirm && mobileDrawMessage) {
+        const opponentColor = drawOfferFrom === "white" ? "White" : "Black";
+        mobileDrawMessage.textContent = `${opponentColor} offers a draw`;
+        mobileDrawConfirm.classList.add('show');
+      }
+    } else {
+      // Desktop: use browser confirm
+      if (confirm("Accept the draw offer?")) {
+        endGame("Game drawn by agreement!");
+        resetBoardPosition();
+      }
     }
   }
 });
@@ -1763,6 +1814,11 @@ newGameBtn.addEventListener('click', () => {
   const drawBtnMobile = document.getElementById('drawBtnMobile');
   if (drawBtnMobile) {
     drawBtnMobile.classList.remove('draw-offered');
+  }
+  // Hide mobile draw confirmation
+  const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+  if (mobileDrawConfirm) {
+    mobileDrawConfirm.classList.remove('show');
   }
 });
 
@@ -2000,8 +2056,85 @@ function setupMobileMenu() {
 
   const drawBtnMobile = document.getElementById('drawBtnMobile');
   const drawBtn = document.getElementById('drawBtn');
+  const mobileDrawConfirm = document.getElementById('mobileDrawConfirm');
+  const mobileDrawAccept = document.getElementById('mobileDrawAccept');
+  const mobileDrawDecline = document.getElementById('mobileDrawDecline');
+  const mobileDrawMessage = document.getElementById('mobileDrawMessage');
+  
   if (drawBtnMobile && drawBtn) {
-    drawBtnMobile.addEventListener('click', () => drawBtn.click());
+    drawBtnMobile.addEventListener('click', () => {
+      const currentPlayer = isWhiteTurn ? "white" : "black";
+      
+      // If no draw offer exists, create one
+      if (drawOfferFrom === null) {
+        drawOfferFrom = currentPlayer;
+        drawAcceptedBy = null;
+        drawBtn.textContent = "Cancel Draw Offer";
+        drawBtn.classList.add('draw-offered');
+        showAlert(`${currentPlayer === "white" ? "White" : "Black"} offers a draw. Waiting for opponent...`);
+        
+        // Update mobile button
+        drawBtnMobile.classList.add('draw-offered');
+      } 
+      // If current player already offered, cancel it
+      else if (drawOfferFrom === currentPlayer) {
+        drawOfferFrom = null;
+        drawAcceptedBy = null;
+        drawBtn.textContent = "Offer Draw";
+        drawBtn.classList.remove('draw-offered');
+        showAlert("Draw offer cancelled.");
+        
+        // Update mobile button and hide confirmation
+        drawBtnMobile.classList.remove('draw-offered');
+        if (mobileDrawConfirm) {
+          mobileDrawConfirm.classList.remove('show');
+        }
+      }
+      // If opponent offered, show mobile confirmation UI
+      else if (drawOfferFrom !== currentPlayer) {
+        // Show mobile confirmation UI instead of browser confirm
+        if (mobileDrawConfirm && mobileDrawMessage) {
+          const opponentColor = drawOfferFrom === "white" ? "White" : "Black";
+          mobileDrawMessage.textContent = `${opponentColor} offers a draw`;
+          mobileDrawConfirm.classList.add('show');
+        }
+      }
+    });
+  }
+  
+  // Handle draw acceptance
+  if (mobileDrawAccept) {
+    mobileDrawAccept.addEventListener('click', () => {
+      if (drawOfferFrom && drawOfferFrom !== (isWhiteTurn ? "white" : "black")) {
+        endGame("Game drawn by agreement!");
+        resetBoardPosition();
+        if (mobileDrawConfirm) {
+          mobileDrawConfirm.classList.remove('show');
+        }
+      }
+    });
+  }
+  
+  // Handle draw decline
+  if (mobileDrawDecline) {
+    mobileDrawDecline.addEventListener('click', () => {
+      if (drawOfferFrom && drawOfferFrom !== (isWhiteTurn ? "white" : "black")) {
+        drawOfferFrom = null;
+        drawAcceptedBy = null;
+        drawBtn.textContent = "Offer Draw";
+        drawBtn.classList.remove('draw-offered');
+        
+        // Update mobile button
+        if (drawBtnMobile) {
+          drawBtnMobile.classList.remove('draw-offered');
+        }
+        
+        showAlert("Draw offer declined.");
+        if (mobileDrawConfirm) {
+          mobileDrawConfirm.classList.remove('show');
+        }
+      }
+    });
   }
 
   if (newGameBtnMobile && newGameBtn) {

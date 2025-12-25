@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // GitHub Pages 404 handler for clean URLs
+        (function() {
+            var path = window.location.pathname;
+            var pathSegments = path.split('/').filter(Boolean);
+            
+            // Route mapping
+            var routes = {
+                'projects': 'Projects.html',
+                'gallery': 'Gallery.html',
+                'services': 'Services.html',
+                'chess': 'Chess/Chess.html'
+            };
+            
+            // Check if we have a matching route
+            if (pathSegments.length > 0) {
+                var route = pathSegments[0].toLowerCase();
+                if (routes[route]) {
+                    // Redirect to the actual file
+                    window.location.replace('/' + routes[route]);
+                    return;
+                }
+            }
+            
+            // If no match, redirect to homepage
+            window.location.replace('/');
+        })();
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
+
